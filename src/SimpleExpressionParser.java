@@ -1,10 +1,10 @@
 import javax.swing.text.html.parser.Parser;
+import java.util.HashMap;
 import java.util.function.Function;
 
 /**
  * Starter code to implement an ExpressionParser. Your parser methods should use the following grammar:
- * E := A | X
- * A := A+M | M
+ * E := E+M | M
  * M := M*M | X
  * X := (E) | L
  * L := [0-9]+ | [a-z]
@@ -34,48 +34,35 @@ public class SimpleExpressionParser implements ExpressionParser {
 	protected Expression parseExpression (String str) {
 		Expression expression;
 		// TODO implement me
-		if (parseE(str)) {
-			return convertToString(str);
-		}
+		//createTree(str);
 		return null;
 	}
 
 	/**
-	 *
+	 * Creates a tree depending on the grammar of the string
 	 * @param str
 	 * @return
 	 */
-	private Expression convertToString(String str) {
-		//TODO implement me
+	/*
+	private Expression createTree(String str) {
+		HashMap treeeee = new HashMap<Expression, Expression>();
+		//TODO implemenut me
+		if(parseE) {
+			return null;
+		}
 		return null;
 	}
+	*/
 
 	//im going to put as private but double check later
-
 	/**
-	 * Checks if the string follows the parsing rules for E
-	 * E -> A | X
+	 * Checks if the string follows the parsing rules for A
+	 * E -> E + M | M
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
 	private boolean parseE(String str) {
-		if(parseA(str)) {
-			return true;
-		}
-		else if (parseX(str)) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Checks if the string follows the parsing rules for A
-	 * A -> A + M | M
-	 * @param str, the string being parsed
-	 * @return a boolean whether or not the the string follows the parsing rules.
-	 */
-	private boolean parseA(String str) {
-		if(parseHelper(str, '+', Parser::parseA, Parser::parseM)) {
+		if(parseHelper(str, '+', Parser::parseE, Parser::parseM)) {
 			return true;
 		}
 		else if (parseM(str)) {
@@ -141,7 +128,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	/**
 	 * Abstracts the bounds for parsing mathmatical expressions
 	 * @param str, string that is being parsed
-	 * @param op, operation symbol (i.e. '+', '-', '*', '/')
+	 * @param op, operation symbol (i.e. '+' or '*')
 	 * @param m1, method 1
 	 * @param m2, method 2
 	 * @return a boolean whether or not the the string follows the parsing rules.
