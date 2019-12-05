@@ -62,8 +62,8 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	private Expression parseE(String str) {
-		if(parseHelper(str, '+', Parser::parseE, Parser::parseM)) {
+	private static Expression parseE(String str) {
+		if(parseHelper(str, '+', SimpleExpressionParser::parseE, SimpleExpressionParser::parseM) != null) {
 			return null;
 		}
 		else if (parseM(str) != null) {
@@ -78,8 +78,8 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	private Expression parseM(String str) {
-		if(parseHelper(str, '*', Parser::parseM, Parser::parseX) != null) {
+	private static Expression parseM(String str) {
+		if(parseHelper(str, '*', SimpleExpressionParser::parseM, SimpleExpressionParser::parseX) != null) {
 			return null;
 		}
 		else if (parseX(str) != null) {
@@ -94,7 +94,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	private Expression parseX(String str) {
+	private static Expression parseX(String str) {
 		for (int i = 1; i < str.length() - 1; i++) {
 			if (str.charAt(0) == '(' &&
 					(parseE(str.substring(i-1, i)) != null) &&
@@ -114,7 +114,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	private Expression parseL(String str) {
+	private static Expression parseL(String str) {
 		//checks if the string contains [a-z]
 		if (str.matches(".*[a-z].*")) {
 			return null;
@@ -134,12 +134,12 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param m2, method 2
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	public Expression parseHelper(String str, char op,
+	public static Expression parseHelper(String str, char op,
 								  Function<String, Expression> m1,
 								  Function<String, Expression> m2) {
 		for(int i = 1; i < str.length() -1; i++) {
-			method1 = m1.apply(str.substring(0, i));
-			method2 = m2.apply(str.substring(i + 1));
+			final Expression method1 = m1.apply(str.substring(0, i));
+			final Expression method2 = m2.apply(str.substring(i + 1));
 			if ((str.charAt(i) == op) &&
 					(method1 != null) &&
 					(method2 != null)) {
