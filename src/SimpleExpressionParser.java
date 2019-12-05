@@ -33,8 +33,20 @@ public class SimpleExpressionParser implements ExpressionParser {
 	
 	protected Expression parseExpression (String str) {
 		Expression expression;
-		
 		// TODO implement me
+		if (parseE(str)) {
+			return convertToString(str);
+		}
+		return null;
+	}
+
+	/**
+	 *
+	 * @param str
+	 * @return
+	 */
+	private Expression convertToString(String str) {
+		//TODO implement me
 		return null;
 	}
 
@@ -115,7 +127,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
 	private boolean parseL(String str) {
-		//TODO implement me
 		//checks if the string contains [a-z]
 		if (str.matches(".*[a-z].*")) {
 			return true;
