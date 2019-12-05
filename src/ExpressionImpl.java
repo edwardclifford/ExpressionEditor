@@ -1,7 +1,7 @@
 
 class ExpressionImpl implements Expression {
 
-	private CompoundExpression parent;
+	public CompoundExpression parent;
 
 	/**
      * Implements an expression

@@ -1,10 +1,11 @@
 class LiteralExpression extends ExpressionImpl {
 
+    public String value;
     /**
      * Implements a terminal expression
      */
     LiteralExpression (String val) {
         super();
-        String value = val;
+        this.value = val;
     } 
 }

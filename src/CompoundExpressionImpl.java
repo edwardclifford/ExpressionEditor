@@ -3,12 +3,13 @@ import java.util.HashSet;
 
 class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpression {
 
+    public Collection<Expression> children = new HashSet<Expression>();
+
     /**
      * Implements a non-terminal expression
      */
     CompoundExpressionImpl () {
         super();
-        Collection<Expression> children = new HashSet<Expression>();
     }
 
     /**
