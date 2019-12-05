@@ -54,7 +54,8 @@ class ExpressionImpl implements Expression {
 	 * tree represented by this expression, starting at the specified indentation level.
 	 * @param stringBuilder the StringBuilder to use for building the String representation
 	 * @param indentLevel the indentation level (number of tabs from the left margin) at which to start
-	 */	
+	 */
+    @Override
 	public void convertToString (StringBuilder stringBuilder, int indentLevel) {
 		final StringBuilder stringBuilder = new StringBuilder();
 		convertToString(stringBuilder, indentLevel);

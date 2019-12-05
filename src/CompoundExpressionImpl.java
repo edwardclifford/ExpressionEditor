@@ -1,3 +1,6 @@
+import java.util.Collection;
+import java.util.HashSet;
+
 class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpression {
 
     /**
@@ -10,7 +13,7 @@ class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpressio
 
     /**
 	 * Adds the specified expression as a child.
-	 * @param subexpression the child expression to add
+	 * @param subExpression the child expression to add
 	 */
 	public void addSubexpression (Expression subExpression) {
         this.children.add(subExpression);
