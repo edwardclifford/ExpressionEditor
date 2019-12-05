@@ -95,8 +95,8 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 */
 	public boolean parseX(String str) {
 		for (int i = 1; i < str.length() - 1; i++) {
-			if (str.charAt(0, i) == '(' &&
-			     parseE(str.substring(i)) &&
+			if (str.charAt(0) == '(' &&
+			     parseE(str.substring(i-1, i)) &&
 			     str.charAt(i+1) == ')') {
 				return true;
 			}
