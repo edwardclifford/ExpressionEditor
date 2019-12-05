@@ -14,6 +14,12 @@ CLASSES = \
 		  ExpressionParser.java \
 		  ExpressionParserPartialTester.java \
 		  SimpleExpressionParser.java \
+		  AdditiveExpression.java \
+		  CompoundExpressionImpl.java \
+		  ExpressionImpl.java \
+		  LiteralExpression.java \
+		  MultiplicativeExpression.java \
+		  ParentheticalExpression.java \
 
 MAIN = ExpressionParser 
 
