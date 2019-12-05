@@ -5,7 +5,7 @@ import java.util.function.Function;
 /**
  * Starter code to implement an ExpressionParser. Your parser methods should use the following grammar:
  * E := E+M | M
- * M := M*M | X
+ * M := M*X | X
  * X := (E) | L
  * L := [0-9]+ | [a-z]
  */
@@ -61,7 +61,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	private boolean parseE(String str) {
+	public boolean parseE(String str) {
 		if(parseHelper(str, '+', Parser::parseE, Parser::parseM)) {
 			return true;
 		}
@@ -73,12 +73,12 @@ public class SimpleExpressionParser implements ExpressionParser {
 
 	/**
 	 * Checks if the string follows the parsing rules for M
-	 * M -> M * M | X
+	 * M -> M * X | X
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	private boolean parseM(String str) {
-		if(parseHelper(str, '*', Parser::parseM, Parser::parseM)) {
+	public boolean parseM(String str) {
+		if(parseHelper(str, '*', Parser::parseM, Parser::parseX)) {
 			return true;
 		}
 		else if (parseX(str)) {
@@ -93,7 +93,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	private boolean parseX(String str) {
+	public boolean parseX(String str) {
 		for (int i = 1; i < str.length() - 1; i++) {
 			if (str.charAt(0, i) == '(' &&
 			     parseE(str.substring(i)) &&
@@ -113,7 +113,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	private boolean parseL(String str) {
+	public boolean parseL(String str) {
 		//checks if the string contains [a-z]
 		if (str.matches(".*[a-z].*")) {
 			return true;
@@ -133,7 +133,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param m2, method 2
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	private boolean parseHelper(String str, char op,
+	public boolean parseHelper(String str, char op,
 								Function<String, Boolean> m1,
 								Function<String, Boolean> m2) {
 		for(int i = 1; i < str.length() -1; i++) {
