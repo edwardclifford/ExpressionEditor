@@ -1,11 +1,13 @@
 
 class ExpressionImpl implements Expression {
 
-    /**
+	private CompoundExpression parent;
+
+	/**
      * Implements an expression
      */
     ExpressionImpl () {
-        private Expression parent;
+	}
 
     /**
      * Returns the expression's parent.
@@ -31,7 +33,7 @@ class ExpressionImpl implements Expression {
 	 */
     public Expression deepCopy () {
         // TODO override in each class
-        Expression copyExpression = new ExpressionImpl;
+        Expression copyExpression = new ExpressionImpl();
         copyExpression.setParent(this.parent);
         return copyExpression;
     }

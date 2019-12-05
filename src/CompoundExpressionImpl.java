@@ -13,7 +13,7 @@ class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpressio
 	 * @param subexpression the child expression to add
 	 */
 	public void addSubexpression (Expression subExpression) {
-        this.children.add(subExpression)
+        this.children.add(subExpression);
     }
 
 }
