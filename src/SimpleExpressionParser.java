@@ -1,3 +1,4 @@
+import javax.swing.text.html.parser.DTD;
 import javax.swing.text.html.parser.Parser;
 import java.util.HashMap;
 import java.util.function.Function;
@@ -62,7 +63,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
 	private Expression parseE(String str) {
-
 		if(parseHelper(str, '+', Parser::parseE, Parser::parseM)) {
 			return null;
 		}
