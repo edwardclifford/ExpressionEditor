@@ -57,10 +57,9 @@ class ExpressionImpl implements Expression {
 	 */
     @Override
 	public void convertToString (StringBuilder stringBuilder, int indentLevel) {
-		final StringBuilder stringBuilder = new StringBuilder();
-		convertToString(stringBuilder, indentLevel);
-		return stringBuilder.toString();
+        // TODO Implement
 	}
+
 
     /**
 	 * Static helper method to indent a specified number of times from the left margin, by
@@ -69,6 +68,7 @@ class ExpressionImpl implements Expression {
 	 * @param indentLevel the number of tabs to append.
 	 */
 	public static void indent (StringBuilder stringBuilder, int indentLevel) {
+        //Could be usefule when implementing converToString? IDK, something about defaults, ask Ted.
 		for (int i = 0; i < indentLevel; i++) {
 			stringBuilder.append('\t');
 		}
