@@ -1,3 +1,4 @@
+import javax.swing.text.html.parser.DTD;
 import javax.swing.text.html.parser.Parser;
 import java.util.HashMap;
 import java.util.function.Function;
@@ -12,7 +13,7 @@ import java.util.function.Function;
 public class SimpleExpressionParser implements ExpressionParser {
 	/*
 	 * Attempts to create an expression tree -- flattened as much as possible -- from the specified String.
-         * Throws a ExpressionParseException if the specified string cannot be parsed.
+	 * Throws a ExpressionParseException if the specified string cannot be parsed.
 	 * @param str the string to parse into an expression tree
 	 * @param withJavaFXControls you can just ignore this variable for R1
 	 * @return the Expression object representing the parsed expression tree
@@ -30,7 +31,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 		expression.flatten();
 		return expression;
 	}
-	
+
 	protected Expression parseExpression (String str) {
 		Expression expression;
 		// TODO implement me
@@ -61,14 +62,14 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	private boolean parseE(String str) {
+	private Expression parseE(String str) {
 		if(parseHelper(str, '+', Parser::parseE, Parser::parseM)) {
-			return true;
+			return null;
 		}
-		else if (parseM(str)) {
-			return true;
+		else if (parseM(str) != null) {
+			return null;
 		}
-		return false;
+		return null;
 	}
 
 	/**
@@ -77,14 +78,14 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	private boolean parseM(String str) {
-		if(parseHelper(str, '*', Parser::parseM, Parser::parseX)) {
-			return true;
+	private Expression parseM(String str) {
+		if(parseHelper(str, '*', Parser::parseM, Parser::parseX) != null) {
+			return null;
 		}
-		else if (parseX(str)) {
-			return true;
+		else if (parseX(str) != null) {
+			return null;
 		}
-		return false;
+		return null;
 	}
 
 	/**
@@ -93,18 +94,18 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	private boolean parseX(String str) {
+	private Expression parseX(String str) {
 		for (int i = 1; i < str.length() - 1; i++) {
 			if (str.charAt(0) == '(' &&
-			     parseE(str.substring(i-1, i)) &&
-			     str.charAt(i+1) == ')') {
-				return true;
+					(parseE(str.substring(i-1, i)) != null) &&
+					str.charAt(i+1) == ')') {
+				return null;
 			}
 		}
-		if (parseL(str)) {
-			return true;
+		if (parseL(str) != null) {
+			return null;
 		}
-		return false;
+		return null;
 	}
 
 	/**
@@ -113,16 +114,16 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	private boolean parseL(String str) {
+	private Expression parseL(String str) {
 		//checks if the string contains [a-z]
 		if (str.matches(".*[a-z].*")) {
-			return true;
+			return null;
 		}
 		//checks if the string contains [0-9]
 		else if (str.contains("[0-9]+")) {
-			return true;
+			return null;
 		}
-		return false;
+		return null;
 	}
 
 	/**
@@ -133,16 +134,18 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param m2, method 2
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	public boolean parseHelper(String str, char op,
-								Function<String, Boolean> m1,
-								Function<String, Boolean> m2) {
+	public Expression parseHelper(String str, char op,
+								  Function<String, Expression> m1,
+								  Function<String, Expression> m2) {
 		for(int i = 1; i < str.length() -1; i++) {
+			method1 = m1.apply(str.substring(0, i));
+			method2 = m2.apply(str.substring(i + 1));
 			if ((str.charAt(i) == op) &&
-					m1.apply(str.substring(0, i)) &&
-					m2.apply(str.substring(i + 1))) {
-				return true;
+					(method1 != null) &&
+					(method2 != null)) {
+				return null;
 			}
 		}
-		return false;
+		return null;
 	}
 }
