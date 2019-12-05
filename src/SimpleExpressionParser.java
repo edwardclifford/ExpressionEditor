@@ -61,7 +61,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	public boolean parseE(String str) {
+	private boolean parseE(String str) {
 		if(parseHelper(str, '+', Parser::parseE, Parser::parseM)) {
 			return true;
 		}
@@ -77,7 +77,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	public boolean parseM(String str) {
+	private boolean parseM(String str) {
 		if(parseHelper(str, '*', Parser::parseM, Parser::parseX)) {
 			return true;
 		}
@@ -93,7 +93,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	public boolean parseX(String str) {
+	private boolean parseX(String str) {
 		for (int i = 1; i < str.length() - 1; i++) {
 			if (str.charAt(0) == '(' &&
 			     parseE(str.substring(i-1, i)) &&
@@ -113,7 +113,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str, the string being parsed
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
-	public boolean parseL(String str) {
+	private boolean parseL(String str) {
 		//checks if the string contains [a-z]
 		if (str.matches(".*[a-z].*")) {
 			return true;
@@ -137,13 +137,12 @@ public class SimpleExpressionParser implements ExpressionParser {
 								Function<String, Boolean> m1,
 								Function<String, Boolean> m2) {
 		for(int i = 1; i < str.length() -1; i++) {
-			if (str.charAt(i) == op &&
-			     m1(str.substring(0, i)) &&
-			     m2(str.substring(i+1))) {
+			if ((str.charAt(i) == op) &&
+					m1.apply(str.substring(0, i)) &&
+					m2.apply(str.substring(i + 1))) {
 				return true;
 			}
 		}
 		return false;
 	}
-
 }
