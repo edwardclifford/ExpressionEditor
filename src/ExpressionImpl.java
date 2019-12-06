@@ -19,7 +19,7 @@ class ExpressionImpl implements Expression {
 
     /**
      * Sets the parent to be the specified expression.
-     * @param parent the CompoindExpression that should be the parent of the target object
+     * @param newParent the CompoindExpression that should be the parent of the target object
      */
     public void setParent (CompoundExpression newParent) {
         this.parent = newParent; 
@@ -64,7 +64,7 @@ class ExpressionImpl implements Expression {
     /**
 	 * Static helper method to indent a specified number of times from the left margin, by
 	 * appending tab characters to the specified StringBuilder.
-	 * @param sb the StringBuilder to which to append tab characters.
+	 * @param stringBuilder the StringBuilder to which to append tab characters.
 	 * @param indentLevel the number of tabs to append.
 	 */
 	public static void indent (StringBuilder stringBuilder, int indentLevel) {
