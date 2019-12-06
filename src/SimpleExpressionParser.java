@@ -86,6 +86,8 @@ public class SimpleExpressionParser implements ExpressionParser {
 			if (str.charAt(0) == '(' &&
 					(parseE(str.substring(i-1, i)) != null) &&
 					str.charAt(i+1) == ')') {
+				//add
+				//wwhhhatat expression do i returnnnnnnn
 				return null;
 			}
 		}
@@ -132,18 +134,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 			if ((str.charAt(i) == op) &&
 					(method1 != null) &&
 					(method2 != null)) {
-				if ((parseL(str.substring(0, i)) != null) && (parseL(str.substring(i+1)) != null)) {
-					//means method 1 and 2 are literals
-					return null;
-				}
-				else if (parseL(str.substring(0, i)) != null) {
-					//means method 1 is a literal
-					return null;
-				}
-				else if (parseL(str.substring(i+1)) != null) {
-					//means method 2 is a literal
-					return null;
-				}
 				//means both method 1 and two are NOT literals
 				return null;
 			}
