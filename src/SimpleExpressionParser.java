@@ -1,13 +1,11 @@
 import javax.swing.text.html.parser.DTD;
-import javax.swing.text.html.parser.Parser;
-import java.util.HashMap;
 import java.util.function.Function;
 
 /**
  * Starter code to implement an ExpressionParser. Your parser methods should use the following grammar:
- * E := E+M | M
- * M := M*X | X
- * X := (E) | L
+ * E := E + M | M
+ * M := M * X | X
+ * X := ( E ) | L
  * L := [0-9]+ | [a-z]
  */
 public class SimpleExpressionParser implements ExpressionParser {
@@ -39,22 +37,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return null;
 	}
 
-	/**
-	 * Creates a tree depending on the grammar of the string
-	 * @param str
-	 * @return
-	 */
-	/*
-	private Expression createTree(String str) {
-		HashMap treeeee = new HashMap<Expression, Expression>();
-		//TODO implemenut me
-		if(parseE) {
-			return null;
-		}
-		return null;
-	}
-	*/
-
 	//im going to put as private but double check later
 	/**
 	 * Checks if the string follows the parsing rules for A
@@ -63,11 +45,15 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
 	private static Expression parseE(String str) {
-		if(parseHelper(str, '+', SimpleExpressionParser::parseE, SimpleExpressionParser::parseM) != null) {
-			return null;
+		Expression express_parser = parseHelper(str, '+', SimpleExpressionParser::parseE, SimpleExpressionParser::parseM);
+		if(express_parser != null) {
+			//adds the operation, '+'
+
+			return express_parser;
 		}
 		else if (parseM(str) != null) {
-			return null;
+			//TODO CHECK THIS
+			return parseM(str);
 		}
 		return null;
 	}
@@ -79,8 +65,9 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @return a boolean whether or not the the string follows the parsing rules.
 	 */
 	private static Expression parseM(String str) {
-		if(parseHelper(str, '*', SimpleExpressionParser::parseM, SimpleExpressionParser::parseX) != null) {
-			return null;
+		Expression value = parseHelper(str, '*', SimpleExpressionParser::parseM, SimpleExpressionParser::parseX);
+		if(value != null) {
+			return value;
 		}
 		else if (parseX(str) != null) {
 			return null;
@@ -127,7 +114,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	}
 
 	/**
-	 * Abstracts the bounds for parsing mathmatical expressions
+	 * Abstracts the bounds for parsing mathematical expressions
 	 * @param str, string that is being parsed
 	 * @param op, operation symbol (i.e. '+' or '*')
 	 * @param m1, method 1
@@ -137,12 +124,27 @@ public class SimpleExpressionParser implements ExpressionParser {
 	public static Expression parseHelper(String str, char op,
 								  Function<String, Expression> m1,
 								  Function<String, Expression> m2) {
+		//TODO finish this method's return objects
+		CompoundExpressionImpl CEI = new CompoundExpressionImpl();
 		for(int i = 1; i < str.length() -1; i++) {
 			final Expression method1 = m1.apply(str.substring(0, i));
 			final Expression method2 = m2.apply(str.substring(i + 1));
 			if ((str.charAt(i) == op) &&
 					(method1 != null) &&
 					(method2 != null)) {
+				if ((parseL(str.substring(0, i)) != null) && (parseL(str.substring(i+1)) != null)) {
+					//means method 1 and 2 are literals
+					return null;
+				}
+				else if (parseL(str.substring(0, i)) != null) {
+					//means method 1 is a literal
+					return null;
+				}
+				else if (parseL(str.substring(i+1)) != null) {
+					//means method 2 is a literal
+					return null;
+				}
+				//means both method 1 and two are NOT literals
 				return null;
 			}
 		}

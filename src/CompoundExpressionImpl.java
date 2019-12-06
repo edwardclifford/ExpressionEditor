@@ -33,7 +33,7 @@ class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpressio
         // Jump to starting indent level
         // Add current expression representation
         // Newline
-        // For each child, with indent + 1, conver to string recursively
+        // For each child, with indent + 1, convert to string recursively
         // Newline when finished 
 
     }  
