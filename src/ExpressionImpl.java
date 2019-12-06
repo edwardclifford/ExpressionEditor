@@ -55,11 +55,7 @@ class ExpressionImpl implements Expression {
 	 * @param stringBuilder the StringBuilder to use for building the String representation
 	 * @param indentLevel the indentation level (number of tabs from the left margin) at which to start
 	 */
-    @Override
-	public void convertToString (StringBuilder stringBuilder, int indentLevel) {
-        // TODO Implement
-	}
-
+	public abstract void convertToString (StringBuilder stringBuilder, int indentLevel); 
 
     /**
 	 * Static helper method to indent a specified number of times from the left margin, by
