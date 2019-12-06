@@ -1,7 +1,6 @@
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
 
-class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpression {
+public class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpression {
 
     /**
      * ArrayList of all children and subtrees contained in the Compound Expression.

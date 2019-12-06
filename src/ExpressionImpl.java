@@ -1,5 +1,5 @@
 
-class ExpressionImpl implements Expression {
+public  class ExpressionImpl implements Expression {
 
 	public CompoundExpression parent;
 
@@ -32,12 +32,9 @@ class ExpressionImpl implements Expression {
 	 * @return the deep copy
 	 */
     public Expression deepCopy () {
-        // TODO override in each class
-        Expression copyExpression = new ExpressionImpl();
-        copyExpression.setParent(this.parent);
-        return copyExpression;
+        return this; 
     }
-
+    
     /**
 	 * Recursively flattens the expression as much as possible
 	 * throughout the entire tree. Specifically, in every multiplicative
@@ -55,7 +52,9 @@ class ExpressionImpl implements Expression {
 	 * @param stringBuilder the StringBuilder to use for building the String representation
 	 * @param indentLevel the indentation level (number of tabs from the left margin) at which to start
 	 */
-	public abstract void convertToString (StringBuilder stringBuilder, int indentLevel); 
+	public void convertToString (StringBuilder stringBuilder, int indentLevel) {
+        // TODO Implement
+    }
 
     /**
 	 * Static helper method to indent a specified number of times from the left margin, by
