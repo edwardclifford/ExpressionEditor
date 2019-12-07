@@ -32,8 +32,11 @@ public class SimpleExpressionParser implements ExpressionParser {
 
     protected Expression parseExpression (String str) {
         Expression expression;
-        // TODO implement me
-        //createTree(str);
+        //create a new parent expression
+		ExpressionImpl parent = new ExpressionImpl();
+        if(parseE(str, (CompoundExpression) parent)!= null) {
+			return parent;
+		}
         return null;
     }
 
