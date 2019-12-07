@@ -15,10 +15,10 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     }
 
     /**
-	 * Adds the specified expression as a child.
-	 * @param subExpression the child expression to add
-	 */
-	public void addSubexpression (Expression subExpression) {
+     * Adds the specified expression as a child.
+     * @param subExpression the child expression to add
+     */
+    public void addSubexpression (Expression subExpression) {
         this._children.add(subExpression);
     }
 
