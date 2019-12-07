@@ -1,5 +1,5 @@
 import javax.swing.text.html.parser.DTD;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 /**
  * Starter code to implement an ExpressionParser. Your parser methods should use the following grammar:
@@ -48,7 +48,7 @@ public class SimpleExpressionParser implements ExpressionParser {
     private static Expression parseE(String str, CompoundExpression parent) {
 
         // Checking E+M
-        final CompoundExpression addExpression = new AddExpression();
+        final CompoundExpression addExpression = new AdditiveExpression();
         if (parseHelper(str, '+', addExpression, SimpleExpressionParser::parseE, SimpleExpressionParser::parseM) != null) {
             parent.addSubexpression(addExpression);
             return addExpression;
@@ -74,9 +74,9 @@ public class SimpleExpressionParser implements ExpressionParser {
     private static Expression parseM(String str, CompoundExpression parent) {
 
         // Checking M*X
-        final CompoundExpression multExpression = new MultExpression();
-        if(parseHelper(str, '*', multExpression, SimpleExpressionParser::parseM, SimpleExpressionParser::parseX);!= null) {
-            parent.addSubExpression(multExpression);
+        final CompoundExpression multExpression = new MultiplicativeExpression();
+        if(parseHelper(str, '*', multExpression, SimpleExpressionParser::parseM, SimpleExpressionParser::parseX) != null) {
+            parent.addSubexpression(multExpression);
             return multExpression;
         }
 
@@ -148,8 +148,8 @@ public class SimpleExpressionParser implements ExpressionParser {
      * @return the valid expression, or null if none exists 
      */
     public static Expression parseHelper(String str, char op, CompoundExpression parent,
-                                  Function<String, Expression> m1,
-                                  Function<String, Expression> m2) {
+                                  BiFunction<String, CompoundExpression, Expression> m1,
+                                  BiFunction<String, CompoundExpression, Expression> m2) {
 
         for(int i = 1; i < str.length() -1; i++) {
             final Expression leftExpression = m1.apply(str.substring(0, i), parent);
