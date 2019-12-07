@@ -31,11 +31,10 @@ public class SimpleExpressionParser implements ExpressionParser {
     }
 
     protected Expression parseExpression (String str) {
-        Expression expression;
-        //create a new parent expression
-		ExpressionImpl parent = new ExpressionImpl();
-        if(parseE(str, (CompoundExpression) parent)!= null) {
-			return parent;
+        Expression expression = null;
+		Expression parsedStr = parseE(str, (CompoundExpression) expression);
+        if(parsedStr != null) {
+			return parsedStr;
 		}
         return null;
     }
