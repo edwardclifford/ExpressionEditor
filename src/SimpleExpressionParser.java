@@ -50,14 +50,15 @@ public class SimpleExpressionParser implements ExpressionParser {
         // Checking E+M
         final CompoundExpression addExpression = new AdditiveExpression();
         if (parseHelper(str, '+', addExpression, SimpleExpressionParser::parseE, SimpleExpressionParser::parseM) != null) {
+            addExpression.setParent(parent);
             parent.addSubexpression(addExpression);
             return addExpression;
         }
 
         // Checking M
-        final CompoundExpression multExpression = new MultiplicativeExpression();
-        if (parseM(str, multExpression) != null) {
-            //TODO CHECK THIS
+        final Expression multExpression = parseM(str, parent);
+        if (multExpression != null) {
+            multExpression.setParent(parent);
             parent.addSubexpression(multExpression);
             return multExpression;
         }
@@ -76,13 +77,24 @@ public class SimpleExpressionParser implements ExpressionParser {
         // Checking M*X
         final CompoundExpression multExpression = new MultiplicativeExpression();
         if(parseHelper(str, '*', multExpression, SimpleExpressionParser::parseM, SimpleExpressionParser::parseX) != null) {
+            multExpression.setParent(parent);
             parent.addSubexpression(multExpression);
             return multExpression;
         }
 
-        // Checking X
+        /*
+        // Checking X -- I dont like this code because it creates layers of nodes 
         final CompoundExpression parenExpression = new ParentheticalExpression();
         if (parseX(str, parenExpression) != null) {
+            parenExpression.setParent(parent);
+            parent.addSubexpression(parenExpression);
+            return parenExpression;
+        }
+        */
+        // Checking X
+        final Expression parenExpression = parseX(str, parent);
+        if (parenExpression != null) {
+            parenExpression.setParent(parent);
             parent.addSubexpression(parenExpression);
             return parenExpression;
         }
@@ -106,6 +118,7 @@ public class SimpleExpressionParser implements ExpressionParser {
             if (str.charAt(0) == '(' &&
                     (parseE(str.substring(i-1, i), parenExpression) != null) &&
                     str.charAt(i+1) == ')') {
+                parenExpression.setParent(parent);
                 parent.addSubexpression(parenExpression);
                 return parenExpression;
             }
@@ -113,6 +126,9 @@ public class SimpleExpressionParser implements ExpressionParser {
         
         // Checking L
         if (parseL(str, parent) != null) {
+            final Expression litExpression = new LiteralExpression(str);
+            litExpression.setParent(parent);
+            parent.addSubexpression(litExpression); 
             return new LiteralExpression(str);
         }
 
@@ -130,9 +146,8 @@ public class SimpleExpressionParser implements ExpressionParser {
     
         //checks if the string contains [a-z] or is a number
         if (str.matches(".*[a-z].*") || str.contains("[0-9]+")) {
-            final Expression literal = new LiteralExpression(str);
-            parent.addSubexpression(literal);
-            return literal;
+            final Expression litExpression = new LiteralExpression(str);
+            return litExpression;
         }
 
         return null;
@@ -157,6 +172,9 @@ public class SimpleExpressionParser implements ExpressionParser {
             if ((str.charAt(i) == op) &&
                     (leftExpression != null) &&
                     (rightExpression != null)) {
+
+                leftExpression.setParent(parent);
+                rightExpression.setParent(parent);
 
                 parent.addSubexpression(leftExpression);
                 parent.addSubexpression(rightExpression);
