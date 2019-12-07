@@ -54,6 +54,7 @@ public  class ExpressionImpl implements Expression {
 	 */
 	public void convertToString (StringBuilder stringBuilder, int indentLevel) {
         // TODO Implement
+        System.out.println("Shouldnt get here.");
     }
 
     /**

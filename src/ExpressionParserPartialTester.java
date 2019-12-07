@@ -54,7 +54,6 @@ public class ExpressionParserPartialTester {
 	public void testExpression3 () throws ExpressionParseException {
 		final String expressionStr = "4*(z+5*x)";
 		final String parseTreeStr = "*\n\t4\n\t()\n\t\t+\n\t\t\tz\n\t\t\t*\n\t\t\t\t5\n\t\t\t\tx\n";
-        System.out.println(parseTreeStr);
 		assertEquals(parseTreeStr, _parser.parse(expressionStr, false).convertToString(0));
 	}
 
@@ -116,9 +115,13 @@ public class ExpressionParserPartialTester {
         final Expression varType = new LiteralExpression("x");
         final Expression numType = new LiteralExpression("1");
 
-        addType.addSubexpression(varType);
+        multType.addSubexpression(varType);
+        multType.addSubexpression(numType);
+
+        addType.addSubexpression(multType);
         addType.addSubexpression(numType); 
 
+        System.out.println(addType.convertToString(0));
         
     }
 }

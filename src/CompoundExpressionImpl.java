@@ -48,12 +48,30 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     }
 
     /**
+     * Recursively builds a string that represents the compound expression of a given symbol
+     * @param stringBuilder the string builder to add on to
+     * @param indentLevel the indentation level at which to start
+     * @param symbol the mathematical symbol to insert
+     */
+    public void convertToStringHelper (StringBuilder stringBuilder, int indentLevel, String symbol) {
+            
+        // Jump to starting indent level
+        indent(stringBuilder, indentLevel);
+        // Add current expression representation
+        stringBuilder.append(symbol + "\n");
+        // For each child, with indent + 1, convert to string recursively
+        for (Expression child : _children) {
+            child.convertToString(stringBuilder, indentLevel + 1);
+        }
+    }
+    /**
      * Recursively builds a string that represents the compound expression
      * @param stringBuilder the string builder to add on to
      * @param indentLevel the indentation level at which to start
      */
     public void convertToString (StringBuilder stringBuilder, int indentLevel) {
         
+        System.out.println("Really shouldn't get here");
         // Jump to starting indent level
         // Add current expression representation
         // Newline
