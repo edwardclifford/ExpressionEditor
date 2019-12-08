@@ -32,6 +32,33 @@ class MultiplicativeExpression extends CompoundExpressionImpl {
      * c itself will be removed. This method modifies the expression itself.
      */
     public void flatten () {
-        // TODO Implement, override in each class
+
+        // Flatten all children
+        for (Expression child : this.getChildren()) {
+            child.flatten();
+        }
+
+        // Check first child 
+        if (this.childrenSize() > 0) {
+            if (this.getSubexpressionAt(0).getClass().equals(this.getClass())) {
+                MultiplicativeExpression child = (MultiplicativeExpression) this.getSubexpressionAt(0);
+                // Matches parent type, replace child with its subchildren
+                this.removeSubexpressionAt(0);
+                for (int i = 0; i < child.childrenSize(); i++) {
+                    this._children.add(i, child.getSubexpressionAt(i)); 
+                }
+            }
+        }
+
+        // Check last child
+        if (this.childrenSize() > 1) {
+            if (this.getSubexpressionAt(this.childrenSize() - 1).getClass().equals(this.getClass())) {
+                MultiplicativeExpression child = (MultiplicativeExpression) this.getSubexpressionAt(this.childrenSize() - 1);
+                this.removeSubexpressionAt(this.childrenSize() - 1);
+                for (int i = 0; i < child.childrenSize(); i++) {
+                    this.addSubexpression(child.getSubexpressionAt(i)); 
+                }
+            } 
+        }
     }
 }

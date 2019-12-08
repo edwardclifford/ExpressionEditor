@@ -45,9 +45,7 @@ public  class ExpressionImpl implements Expression {
      * child c is of the same type as x, the children of c will be added to x, and
      * c itself will be removed. This method modifies the expression itself.
      */
-    public void flatten () {
-        // TODO Implement, override in each class
-    }
+    public void flatten () {}
 
     /**
      * Creates a String representation by recursively printing out (using indentation) the

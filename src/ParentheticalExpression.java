@@ -23,4 +23,20 @@ class ParentheticalExpression extends CompoundExpressionImpl {
     public void convertToString (StringBuilder stringBuilder, int indentLevel) {
         convertToStringHelper(stringBuilder, indentLevel, "()");
     }
+
+    @Override
+    /**
+     * Recursively flattens the expression as much as possible
+     * throughout the entire tree. Specifically, in every multiplicative
+     * or additive expression x whose first or last
+     * child c is of the same type as x, the children of c will be added to x, and
+     * c itself will be removed. This method modifies the expression itself.
+     */
+    public void flatten () {
+        // Flatten the inside of this expression    
+        for (Expression child : this.getChildren()) {
+            child.flatten();
+        }
+    }
+
 }
