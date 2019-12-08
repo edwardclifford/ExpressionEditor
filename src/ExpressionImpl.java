@@ -1,12 +1,14 @@
 public  class ExpressionImpl implements Expression {
 
+    /**
+     * Pointer to the Expression's parent
+     */
     public CompoundExpression parent;
 
     /**
      * Implements an expression
      */
-    ExpressionImpl () {
-    }
+    ExpressionImpl () {}
 
     /**
      * Returns the expression's parent.
@@ -22,10 +24,6 @@ public  class ExpressionImpl implements Expression {
      */
     public void setParent (CompoundExpression newParent) {
         this.parent = newParent;
-    }
-
-    public String getType () {
-        return "Expression";
     }
 
     /**
@@ -53,10 +51,7 @@ public  class ExpressionImpl implements Expression {
      * @param stringBuilder the StringBuilder to use for building the String representation
      * @param indentLevel the indentation level (number of tabs from the left margin) at which to start
      */
-    public void convertToString (StringBuilder stringBuilder, int indentLevel) {
-        // TODO Implement
-        System.out.println("Shouldnt get here.");
-    }
+    public void convertToString (StringBuilder stringBuilder, int indentLevel) {}
 
     /**
      * Static helper method to indent a specified number of times from the left margin, by

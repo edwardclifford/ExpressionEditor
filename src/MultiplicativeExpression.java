@@ -5,14 +5,27 @@ class MultiplicativeExpression extends CompoundExpressionImpl {
      */
     MultiplicativeExpression () {
         super();
-        // TODO Implement?
     }
-    
+
     @Override
-    public String getType () {
-        return "Multiplicative";
+    /**
+     * Creates and returns a deep copy of the expression.
+     * The entire tree rooted at the target node is copied, i.e.,
+     * the copied Expression is as deep as possible.
+     * @return the deep copy
+     */
+    public Expression deepCopy () {
+        CompoundExpression copyExpression = new MultiplicativeExpression();
+
+        for (Expression child : this.getChildren()) {
+            Expression copyChild = child.deepCopy();
+            copyChild.setParent(copyExpression);
+            copyExpression.addSubexpression(child);
+        }
+
+        return copyExpression; 
     }
-    
+
     @Override
     /**
      * Recursively builds a string that represents the compound expression
@@ -54,6 +67,7 @@ class MultiplicativeExpression extends CompoundExpressionImpl {
         if (this.childrenSize() > 1) {
             if (this.getSubexpressionAt(this.childrenSize() - 1).getClass().equals(this.getClass())) {
                 MultiplicativeExpression child = (MultiplicativeExpression) this.getSubexpressionAt(this.childrenSize() - 1);
+                // Matches the parent type, replace the child with it's children at the end of the list
                 this.removeSubexpressionAt(this.childrenSize() - 1);
                 for (int i = 0; i < child.childrenSize(); i++) {
                     this.addSubexpression(child.getSubexpressionAt(i)); 

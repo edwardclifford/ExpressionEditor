@@ -1,6 +1,10 @@
 class LiteralExpression extends ExpressionImpl {
 
+    /**
+     * String that represents the value of the literal
+     */
     public String value;
+
     /**
      * Implements a terminal expression
      */
@@ -8,12 +12,17 @@ class LiteralExpression extends ExpressionImpl {
         super();
         this.value = val;
     } 
-    
-    @Override
-    public String getType () {
-        return "Literal";
-    }
 
+    @Override
+    /**
+     * Creates and returns a deep copy of the expression.
+     * The entire tree rooted at the target node is copied, i.e.,
+     * the copied Expression is as deep as possible.
+     * @return the deep copy
+     */
+    public Expression deepCopy() {
+        return new LiteralExpression(value);
+    }
 
     @Override
     /**

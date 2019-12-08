@@ -5,15 +5,27 @@ class ParentheticalExpression extends CompoundExpressionImpl {
      */
     ParentheticalExpression () {
         super();
-        // TODO Implement me?
-    }
- 
-    @Override
-    public String getType () {
-        return "Parenthetical";
     }
 
-   
+    @Override
+    /**
+     * Creates and returns a deep copy of the expression.
+     * The entire tree rooted at the target node is copied, i.e.,
+     * the copied Expression is as deep as possible.
+     * @return the deep copy
+     */
+    public Expression deepCopy () {
+        CompoundExpression copyExpression = new ParentheticalExpression();
+
+        for (Expression child : this.getChildren()) {
+            Expression copyChild = child.deepCopy();
+            copyChild.setParent(copyExpression);
+            copyExpression.addSubexpression(child);
+        }
+
+        return copyExpression; 
+    }
+
     @Override
     /**
      * Recursively builds a string that represents the compound expression

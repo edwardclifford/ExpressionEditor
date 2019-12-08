@@ -6,6 +6,10 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      * ArrayList of all children and subtrees contained in the Compound Expression.
      */
     public List<Expression> _children = new ArrayList<Expression>();
+
+    /**
+     * Hashset of all children, used to avoid adding the same child twice
+     */
     public Collection<Expression> _seenChildren = new HashSet<Expression>();
 
     /**
@@ -13,11 +17,6 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      */
     CompoundExpressionImpl () {
         super();
-    }
-
-    @Override
-    public String getType () {
-        return "CompoundExpression";
     }
 
     /**
@@ -78,24 +77,15 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
         stringBuilder.append(symbol + "\n");
         // For each child, with indent + 1, convert to string recursively
         for (Expression child : _children) {
-            //System.out.println("children ++++++++" +child);
             child.convertToString(stringBuilder, indentLevel + 1);
         }
     }
+
     /**
      * Recursively builds a string that represents the compound expression
      * @param stringBuilder the string builder to add on to
      * @param indentLevel the indentation level at which to start
      */
-    public void convertToString (StringBuilder stringBuilder, int indentLevel) {
-
-        System.out.println("Really shouldn't get here");
-        // Jump to starting indent level
-        // Add current expression representation
-        // Newline
-        // For each child, with indent + 1, convert to string recursively
-        // Newline when finished
-
-    }
+    public void convertToString (StringBuilder stringBuilder, int indentLevel) {}
 
 }
