@@ -121,7 +121,7 @@ public class SimpleExpressionParser implements ExpressionParser {
         // Checking (E)
         for (int i = 0; i < str.length() - 1; i++) {
             if (str.charAt(i) == '(') {
-                int parenCounter = 1;
+                int parenCounter = 0;
                 for (int j = i; j < str.length(); j++) {
              
                     // Ensures that brackets are proper pairs
