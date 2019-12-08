@@ -31,10 +31,11 @@ public class SimpleExpressionParser implements ExpressionParser {
     }
 
     protected Expression parseExpression (String str) {
-        CompoundExpression dummyExpression = new CompoundExpression();
-        Expression parsedStr = parseE(str, dummyExpression);
+        CompoundExpressionImpl dummyExpression = new CompoundExpressionImpl();
+        CompoundExpressionImpl parsedStr = (CompoundExpressionImpl) parseE(str, dummyExpression);
         if(parsedStr != null) {
-            parsedStr = parsedStr.getSubexpressionAt(0);
+            //parsedStr = (CompoundExpressionImpl) dummyExpression.getSubexpressionAt(0);
+            System.out.println("PARSED STRING  " + parsedStr.getChildren());
             return parsedStr;
         }
         return null;
@@ -196,6 +197,7 @@ public class SimpleExpressionParser implements ExpressionParser {
                 System.out.println("Parent HELPER: " + parent);
                 System.out.println("Left HELPER: " + leftExpression);
                 System.out.println("Right HELPER: " + rightExpression);
+
                 return parent;
             }
         }

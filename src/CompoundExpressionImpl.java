@@ -20,7 +20,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      * @param subExpression the child expression to add
      */
     public void addSubexpression (Expression subExpression) {
-        if (this._seenChildren.contains(subExpression)) {
+        if (!(this._seenChildren.contains(subExpression))) {
             this._children.add(subExpression);
             this._seenChildren.add(subExpression);
         }
