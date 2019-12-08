@@ -48,7 +48,7 @@ public class SimpleExpressionParser implements ExpressionParser {
      * @return the valid expression, or null if none exists
      */
     private static Expression parseE(String str, CompoundExpression parent) {
-
+        System.out.println("STIRNG IN parseE:  " + str);
         // Checking E+M
         final CompoundExpression addExpression = new AdditiveExpression();
 
@@ -65,8 +65,9 @@ public class SimpleExpressionParser implements ExpressionParser {
         final Expression multExpression = parseM(str, parent);
         if (multExpression != null) {
 
-            //multExpression.setParent(parent);
+            multExpression.setParent(parent);
             parent.addSubexpression(multExpression);
+            System.out.println("Found an M!!MMMM" + str);
             return multExpression;
         }
         return null;
@@ -89,19 +90,12 @@ public class SimpleExpressionParser implements ExpressionParser {
             return multExpression;
         }
 
-        /*
-        // Checking X -- I dont like this code because it creates layers of nodes
-        final CompoundExpression parenExpression = new ParentheticalExpression();
-        if (parseX(str, parenExpression) != null) {
-            parenExpression.setParent(parent);
-            parent.addSubexpression(parenExpression);
-            return parenExpression;
-        }
-        */
+
         // Checking X
         final Expression parenExpression = parseX(str, parent);
          if (parenExpression != null) {
-            //parenExpression.setParent(parent);
+            System.out.println("found an X!!! " +str);
+            parenExpression.setParent(parent);
             parent.addSubexpression(parenExpression);
             return parenExpression;
         }
@@ -117,9 +111,10 @@ public class SimpleExpressionParser implements ExpressionParser {
      * @return the valid expression, or null if none exists
      */
     private static Expression parseX(String str, CompoundExpression parent) {
-
+        System.out.println("STRING  " + str);
         // Checking (E)
         for (int i = 0; i < str.length() - 1; i++) {
+
             if (str.charAt(i) == '(') {
                 int parenCounter = 0;
                 for (int j = i; j < str.length(); j++) {
@@ -127,13 +122,21 @@ public class SimpleExpressionParser implements ExpressionParser {
                     // Ensures that brackets are proper pairs
                     if (str.charAt(j) == '(') parenCounter++;
                     else if (str.charAt(j) == ')') parenCounter--;
+                    else if (parenCounter < 0) break;
 
                     final CompoundExpression parenExpression = new ParentheticalExpression();
+                    System.out.println("LENGTH OF STRING 2: " + str.length());
+                    System.out.println("i === " + i);
+                    System.out.println("j === " + j);
+                    System.out.println("string at i ==++ " + str.charAt(i));
+                    System.out.println("string at j ==++ " + str.charAt(j));
+                    System.out.println("parentCounter!!!!! " +parenCounter);
 
                     if((str.charAt(j)==')') && (parenCounter == 0)) {
                         if (str.charAt(i) == '(' &&
                                 (parseE(str.substring(i + 1, j), parenExpression) != null) &&
                                 str.charAt(j) == ')') {
+                            System.out.println("GOT TO INSIDE PARAM ");
                             parenExpression.setParent(parent);
                             parent.addSubexpression(parenExpression);
                             return parenExpression;
@@ -146,11 +149,11 @@ public class SimpleExpressionParser implements ExpressionParser {
         // Checking L
         final Expression litExpression = parseL(str, parent);
         if (litExpression != null) {
-
+            System.out.println("GOT TO INSIDE PARSEM CHECKING L " + str);
             parent.addSubexpression(litExpression);
             return litExpression;
         }
-
+        System.out.println("GOT TO INSIDE PARSEM INVALID" + str);
         return null;
     }
 
@@ -187,7 +190,7 @@ public class SimpleExpressionParser implements ExpressionParser {
     public static Expression parseHelper(String str, char op, CompoundExpression parent,
                                          BiFunction<String, CompoundExpression, Expression> m1,
                                          BiFunction<String, CompoundExpression, Expression> m2) {
-
+        System.out.println("STIRNG IN parseHelper:  " + str);
         for(int i = 1; i < str.length() -1; i++) {
             if(str.charAt(i) == op) {
                 CompoundExpressionImpl dummyExpression = new CompoundExpressionImpl();
@@ -208,6 +211,7 @@ public class SimpleExpressionParser implements ExpressionParser {
                 }
             }
         }
+        System.out.println("PARSE HELPER INVALID ^^^^^^^^^^");
         return null;
     }
 }
