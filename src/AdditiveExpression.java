@@ -33,10 +33,28 @@ class AdditiveExpression extends CompoundExpressionImpl {
      */
     public void flatten () {
         // TODO Implement, override in each class
-        for (Expression child : _children) {
-            System.out.println(child.getType);
+
+        // Check first child 
+        if (this.childSize() > 0) {
+            Expression child = this.getSubexpressionAt(0);
+            if (child.getClass().equals(this.getClass())) {
+                // Matches parent type, replace child with its subchildren
+                this.removeSubexpression(0);
+                for (int i = 0; i < child.childSize(); i++) {
+                    this._children.add(i, child.getExpression(i).flatten()); 
+                }
+            }
+        }
+
+        if (this.childSize() > 1) {
+            Expression child = this.getSubexpressionAt(this.childSize() - 1);
+            if (child.getClass().equals(this.getClass())) {
+                this.removeSubexpression(this.childSize() - 1);
+                for (int i = 0; i < child.childSize(); i++) {
+                    this.addSubexpression(child.getExpression(i).flatten()); 
+                }
+            } 
         }
     }
-
- 
 }
+ 

@@ -49,6 +49,14 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     }
 
     /**
+     * Removes the child node at a given index.
+     * @param index the index at which to remove the child
+     */
+    public void removeSubexpressionAt (int index) {
+        this._children.remove(index);
+    }
+
+    /**
      * Returns the ammount of children nodes.
      * @return the ammount of children nodes
      */
