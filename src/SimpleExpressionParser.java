@@ -139,12 +139,11 @@ public class SimpleExpressionParser implements ExpressionParser {
         }
 
         // Checking L
-        if (parseL(str, parent) != null) {
+        final Expression litExpression = parseL(str, parent);
+        if (litExpression != null) {
             System.out.println("CHECKING PARSEL");
-            final Expression litExpression = new LiteralExpression(str);
-            litExpression.setParent(parent);
             parent.addSubexpression(litExpression);
-            return new LiteralExpression(str);
+            return litExpression;
         }
 
         return null;
@@ -161,9 +160,8 @@ public class SimpleExpressionParser implements ExpressionParser {
 
         //checks if the string contains [a-z] or is a number
         if (str.matches(".*[a-z].*") || str.contains("[0-9]+")) {
-            System.out.println("YOU GOT TO PARSEL");
-
             final Expression litExpression = new LiteralExpression(str);
+            litExpression.setParent(parent);
             return litExpression;
         }
 
