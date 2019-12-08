@@ -194,8 +194,8 @@ public class SimpleExpressionParser implements ExpressionParser {
                 parent.addSubexpression(leftExpression);
                 parent.addSubexpression(rightExpression);
                 System.out.println("Parent HELPER: " + parent);
-                System.out.println("Left HELPER: " + leftExpression.value);
-                System.out.println("Right HELPER: " + rightExpression.value);
+                System.out.println("Left HELPER: " + leftExpression);
+                System.out.println("Right HELPER: " + rightExpression);
                 return parent;
             }
         }
