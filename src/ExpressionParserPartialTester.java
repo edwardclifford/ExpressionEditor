@@ -41,6 +41,16 @@ public class ExpressionParserPartialTester {
     /**
      * Verifies that a specific expression is parsed into the correct parse tree.
      */
+    public void testExpression4 () throws ExpressionParseException {
+        final String expressionStr = "a+b+c";
+        final String parseTreeStr = "+\n\t+\n\t\ta\n\t\tb\n\tc\n";
+        assertEquals(parseTreeStr, _parser.parse(expressionStr, false).convertToString(0));
+    }
+
+    @Test
+    /**
+     * Verifies that a specific expression is parsed into the correct parse tree.
+     */
     public void testExpression2 () throws ExpressionParseException {
         final String expressionStr = "13*x";
         final String parseTreeStr = "*\n\t13\n\tx\n";

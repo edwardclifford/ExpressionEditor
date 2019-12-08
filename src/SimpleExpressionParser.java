@@ -51,9 +51,10 @@ public class SimpleExpressionParser implements ExpressionParser {
 
         // Checking E+M
         final CompoundExpression addExpression = new AdditiveExpression();
+
+        //checking to find a '+'
         Expression helpParse = parseHelper(str, '+', addExpression, SimpleExpressionParser::parseE, SimpleExpressionParser::parseM);
         if (helpParse != null) {
-
             addExpression.setParent(parent);
 
             parent.addSubexpression(addExpression);
