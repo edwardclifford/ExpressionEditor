@@ -123,14 +123,14 @@ public class SimpleExpressionParser implements ExpressionParser {
             if (str.charAt(i) == '(') {
                 int parenCounter = 0;
                 for (int j = i; j < str.length(); j++) {
-             
+
                     // Ensures that brackets are proper pairs
                     if (str.charAt(j) == '(') parenCounter++;
                     else if (str.charAt(j) == ')') parenCounter--;
 
                     final CompoundExpression parenExpression = new ParentheticalExpression();
 
-                    if(str.charAt(j)==')' && parenCounter == 0) {
+                    if((str.charAt(j)==')') && (parenCounter == 0)) {
                         if (str.charAt(i) == '(' &&
                                 (parseE(str.substring(i + 1, j), parenExpression) != null) &&
                                 str.charAt(j) == ')') {
