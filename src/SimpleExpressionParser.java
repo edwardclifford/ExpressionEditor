@@ -32,10 +32,10 @@ public class SimpleExpressionParser implements ExpressionParser {
 
     protected Expression parseExpression (String str) {
         Expression expression = null;
-		Expression parsedStr = parseE(str, (CompoundExpression) expression);
+        Expression parsedStr = parseE(str, (CompoundExpression) expression);
         if(parsedStr != null) {
-			return parsedStr;
-		}
+            return parsedStr;
+        }
         return null;
     }
 
@@ -45,14 +45,20 @@ public class SimpleExpressionParser implements ExpressionParser {
      * E -> E + M | M
      * @param str, the string being parsed
      * @param parent the expression the parsed string will belong to
-     * @return the valid expression, or null if none exists 
+     * @return the valid expression, or null if none exists
      */
     private static Expression parseE(String str, CompoundExpression parent) {
 
         // Checking E+M
         final CompoundExpression addExpression = new AdditiveExpression();
-        if (parseHelper(str, '+', addExpression, SimpleExpressionParser::parseE, SimpleExpressionParser::parseM) != null) {
+        Expression helpParse = parseHelper(str, '+', addExpression, SimpleExpressionParser::parseE, SimpleExpressionParser::parseM);
+        if (helpParse != null) {
+            parent = (CompoundExpression) helpParse;
+            System.out.println("Parent E: " + parent);
             addExpression.setParent(parent);
+
+            System.out.println("addExpression E: " + addExpression);
+
             parent.addSubexpression(addExpression);
             return addExpression;
         }
@@ -60,6 +66,8 @@ public class SimpleExpressionParser implements ExpressionParser {
         // Checking M
         final Expression multExpression = parseM(str, parent);
         if (multExpression != null) {
+            System.out.println("PARSE E + WAS NO FOUND");
+
             multExpression.setParent(parent);
             parent.addSubexpression(multExpression);
             return multExpression;
@@ -72,20 +80,21 @@ public class SimpleExpressionParser implements ExpressionParser {
      * M -> M * X | X
      * @param str, the string being parsed
      * @param parent the expression the parsed string will belong to
-     * @return the valid expression, or null if none exists 
+     * @return the valid expression, or null if none exists
      */
     private static Expression parseM(String str, CompoundExpression parent) {
 
         // Checking M*X
         final CompoundExpression multExpression = new MultiplicativeExpression();
         if(parseHelper(str, '*', multExpression, SimpleExpressionParser::parseM, SimpleExpressionParser::parseX) != null) {
+            System.out.println("PARSEM ** was FOUND");
             multExpression.setParent(parent);
             parent.addSubexpression(multExpression);
             return multExpression;
         }
 
         /*
-        // Checking X -- I dont like this code because it creates layers of nodes 
+        // Checking X -- I dont like this code because it creates layers of nodes
         final CompoundExpression parenExpression = new ParentheticalExpression();
         if (parseX(str, parenExpression) != null) {
             parenExpression.setParent(parent);
@@ -95,7 +104,8 @@ public class SimpleExpressionParser implements ExpressionParser {
         */
         // Checking X
         final Expression parenExpression = parseX(str, parent);
-        if (parenExpression != null) {
+         if (parenExpression != null) {
+            System.out.println("PARSEM NO ** FOUND");
             parenExpression.setParent(parent);
             parent.addSubexpression(parenExpression);
             return parenExpression;
@@ -109,28 +119,31 @@ public class SimpleExpressionParser implements ExpressionParser {
      * X -> (E) | L
      * @param str, the string being parsed
      * @param parent the expression the parsed string will belong to
-     * @return the valid expression, or null if none exists 
+     * @return the valid expression, or null if none exists
      */
     private static Expression parseX(String str, CompoundExpression parent) {
 
         // Checking (E)
         for (int i = 1; i < str.length() - 1; i++) {
+
             final CompoundExpression parenExpression = new ParentheticalExpression();
 
             if (str.charAt(0) == '(' &&
                     (parseE(str.substring(i-1, i), parenExpression) != null) &&
                     str.charAt(i+1) == ')') {
+                System.out.println("PARSEX FOUND A PARENTHISY");
                 parenExpression.setParent(parent);
                 parent.addSubexpression(parenExpression);
                 return parenExpression;
             }
         }
-        
+
         // Checking L
         if (parseL(str, parent) != null) {
+            System.out.println("CHECKING PARSEL");
             final Expression litExpression = new LiteralExpression(str);
             litExpression.setParent(parent);
-            parent.addSubexpression(litExpression); 
+            parent.addSubexpression(litExpression);
             return new LiteralExpression(str);
         }
 
@@ -142,12 +155,14 @@ public class SimpleExpressionParser implements ExpressionParser {
      * L -> [a-z] | [0-9]
      * @param str, the string being parsed
      * @param parent the expression the parsed string will belong to
-     * @return the valid expression, or null if none exists 
+     * @return the valid expression, or null if none exists
      */
     private static Expression parseL(String str, CompoundExpression parent) {
-    
+
         //checks if the string contains [a-z] or is a number
         if (str.matches(".*[a-z].*") || str.contains("[0-9]+")) {
+            System.out.println("YOU GOT TO PARSEL");
+
             final Expression litExpression = new LiteralExpression(str);
             return litExpression;
         }
@@ -162,11 +177,11 @@ public class SimpleExpressionParser implements ExpressionParser {
      * @param parent the expression the parsed string will belong to
      * @param m1, method 1
      * @param m2, method 2
-     * @return the valid expression, or null if none exists 
+     * @return the valid expression, or null if none exists
      */
     public static Expression parseHelper(String str, char op, CompoundExpression parent,
-                                  BiFunction<String, CompoundExpression, Expression> m1,
-                                  BiFunction<String, CompoundExpression, Expression> m2) {
+                                         BiFunction<String, CompoundExpression, Expression> m1,
+                                         BiFunction<String, CompoundExpression, Expression> m2) {
 
         for(int i = 1; i < str.length() -1; i++) {
             final Expression leftExpression = m1.apply(str.substring(0, i), parent);
@@ -180,7 +195,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 
                 parent.addSubexpression(leftExpression);
                 parent.addSubexpression(rightExpression);
-
+                System.out.println("Parent HELPER: " + parent);
                 return parent;
             }
         }

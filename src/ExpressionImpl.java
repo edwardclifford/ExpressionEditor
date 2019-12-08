@@ -1,4 +1,3 @@
-
 public  class ExpressionImpl implements Expression {
 
     public CompoundExpression parent;
@@ -22,7 +21,7 @@ public  class ExpressionImpl implements Expression {
      * @param newParent the CompoindExpression that should be the parent of the target object
      */
     public void setParent (CompoundExpression newParent) {
-        this.parent = newParent; 
+        this.parent = newParent;
     }
 
     /**
@@ -32,9 +31,9 @@ public  class ExpressionImpl implements Expression {
      * @return the deep copy
      */
     public Expression deepCopy () {
-        return this; 
+        return this;
     }
-    
+
     /**
      * Recursively flattens the expression as much as possible
      * throughout the entire tree. Specifically, in every multiplicative
@@ -43,7 +42,7 @@ public  class ExpressionImpl implements Expression {
      * c itself will be removed. This method modifies the expression itself.
      */
     public void flatten () {
-        // TODO Implement, override in each class   
+        // TODO Implement, override in each class
     }
 
     /**
