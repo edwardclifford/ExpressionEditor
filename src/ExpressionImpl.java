@@ -24,6 +24,10 @@ public  class ExpressionImpl implements Expression {
         this.parent = newParent;
     }
 
+    public String getType () {
+        return "Expression";
+    }
+
     /**
      * Creates and returns a deep copy of the expression.
      * The entire tree rooted at the target node is copied, i.e.,
