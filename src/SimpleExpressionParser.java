@@ -32,10 +32,10 @@ public class SimpleExpressionParser implements ExpressionParser {
 
     protected Expression parseExpression (String str) {
         CompoundExpressionImpl dummyExpression = new CompoundExpressionImpl();
-        CompoundExpressionImpl parsedStr = (CompoundExpressionImpl) parseE(str, dummyExpression);
+        Expression parsedStr = parseE(str, dummyExpression);
         if(parsedStr != null) {
             //parsedStr = (CompoundExpressionImpl) dummyExpression.getSubexpressionAt(0);
-            System.out.println("PARSED STRING  " + parsedStr.getChildren());
+            //System.out.println("PARSED STRING  " + parsedStr.getChildren());
             return parsedStr;
         }
         return null;
@@ -69,7 +69,7 @@ public class SimpleExpressionParser implements ExpressionParser {
         if (multExpression != null) {
             System.out.println("PARSE E + WAS NO FOUND");
 
-            multExpression.setParent(parent);
+            //multExpression.setParent(parent);
             parent.addSubexpression(multExpression);
             return multExpression;
         }
@@ -107,7 +107,7 @@ public class SimpleExpressionParser implements ExpressionParser {
         final Expression parenExpression = parseX(str, parent);
          if (parenExpression != null) {
             System.out.println("PARSEM NO ** FOUND");
-            parenExpression.setParent(parent);
+            //parenExpression.setParent(parent);
             parent.addSubexpression(parenExpression);
             return parenExpression;
         }
@@ -142,7 +142,7 @@ public class SimpleExpressionParser implements ExpressionParser {
         // Checking L
         final Expression litExpression = parseL(str, parent);
         if (litExpression != null) {
-            System.out.println("CHECKING PARSEL");
+            System.out.println("CHECKING PARSEL in x");
             parent.addSubexpression(litExpression);
             return litExpression;
         }

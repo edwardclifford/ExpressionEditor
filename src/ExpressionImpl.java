@@ -63,7 +63,7 @@ public  class ExpressionImpl implements Expression {
      * @param indentLevel the number of tabs to append.
      */
     public static void indent (StringBuilder stringBuilder, int indentLevel) {
-        //Could be usefule when implementing converToString? IDK, something about defaults, ask Ted.
+
         for (int i = 0; i < indentLevel; i++) {
             stringBuilder.append('\t');
         }
