@@ -9,7 +9,7 @@ import java.util.function.BiFunction;
  * L := [0-9]+ | [a-z]
  */
 public class SimpleExpressionParser implements ExpressionParser {
-    /*
+    /**
      * Attempts to create an expression tree -- flattened as much as possible -- from the specified String.
      * Throws a ExpressionParseException if the specified string cannot be parsed.
      * @param str the string to parse into an expression tree
@@ -17,9 +17,11 @@ public class SimpleExpressionParser implements ExpressionParser {
      * @return the Expression object representing the parsed expression tree
      */
     public Expression parse (String str, boolean withJavaFXControls) throws ExpressionParseException {
+
         // Remove spaces -- this simplifies the parsing logic
         str = str.replaceAll(" ", "");
         Expression expression = parseExpression(str);
+
         if (expression == null) {
             // If we couldn't parse the string, then raise an error
             throw new ExpressionParseException("Cannot parse expression: " + str);
@@ -30,16 +32,19 @@ public class SimpleExpressionParser implements ExpressionParser {
         return expression;
     }
 
-    protected Expression parseExpression (String str) {
+    private Expression parseExpression (String str) {
+
+        // Use dummy to act as temporary root node
         CompoundExpressionImpl dummyExpression = new CompoundExpressionImpl();
         Expression parsedStr = parseE(str, dummyExpression);
-        if(parsedStr != null) {
+
+        if (parsedStr != null) {
             return parsedStr;
         }
+
         return null;
     }
 
-    //im going to put as private but double check later
     /**
      * Checks if the string follows the parsing rules for A
      * E -> E + M | M
@@ -48,15 +53,13 @@ public class SimpleExpressionParser implements ExpressionParser {
      * @return the valid expression, or null if none exists
      */
     private static Expression parseE(String str, CompoundExpression parent) {
-        System.out.println("STIRNG IN parseE:  " + str);
+    
         // Checking E+M
         final CompoundExpression addExpression = new AdditiveExpression();
-
-        //checking to find a '+'
         Expression helpParse = parseHelper(str, '+', addExpression, SimpleExpressionParser::parseE, SimpleExpressionParser::parseM);
         if (helpParse != null) {
-            addExpression.setParent(parent);
 
+            addExpression.setParent(parent);
             parent.addSubexpression(addExpression);
             return addExpression;
         }
@@ -67,9 +70,9 @@ public class SimpleExpressionParser implements ExpressionParser {
 
             multExpression.setParent(parent);
             parent.addSubexpression(multExpression);
-            System.out.println("Found an M!!MMMM" + str);
             return multExpression;
         }
+
         return null;
     }
 
@@ -85,16 +88,16 @@ public class SimpleExpressionParser implements ExpressionParser {
         // Checking M*X
         final CompoundExpression multExpression = new MultiplicativeExpression();
         if(parseHelper(str, '*', multExpression, SimpleExpressionParser::parseM, SimpleExpressionParser::parseX) != null) {
+
             multExpression.setParent(parent);
             parent.addSubexpression(multExpression);
             return multExpression;
         }
 
-
         // Checking X
         final Expression parenExpression = parseX(str, parent);
          if (parenExpression != null) {
-            System.out.println("found an X!!! " +str);
+
             parenExpression.setParent(parent);
             parent.addSubexpression(parenExpression);
             return parenExpression;
@@ -111,37 +114,26 @@ public class SimpleExpressionParser implements ExpressionParser {
      * @return the valid expression, or null if none exists
      */
     private static Expression parseX(String str, CompoundExpression parent) {
-        System.out.println("STRING  " + str);
+
         // Checking (E)
-        for (int i = 0; i < str.length() - 1; i++) {
+        if (str.length() > 0 && str.charAt(0) == '(') {
+            int parenCounter = 0;
 
-            if (str.charAt(i) == '(') {
-                int parenCounter = 0;
-                for (int j = i; j < str.length(); j++) {
+            for (int i = 0; i < str.length(); i++) {
+                // Ensures that brackets are balanced 
+                if (str.charAt(i) == '(') parenCounter++;
+                else if (str.charAt(i) == ')') parenCounter--;
+            }
 
-                    // Ensures that brackets are proper pairs
-                    if (str.charAt(j) == '(') parenCounter++;
-                    else if (str.charAt(j) == ')') parenCounter--;
-                    else if (parenCounter < 0) break;
+            // If brackets are balanced and last char is a ), check contents 
+            if (parenCounter == 0 && str.charAt(str.length() - 1) == ')') {
 
-                    final CompoundExpression parenExpression = new ParentheticalExpression();
-                    System.out.println("LENGTH OF STRING 2: " + str.length());
-                    System.out.println("i === " + i);
-                    System.out.println("j === " + j);
-                    System.out.println("string at i ==++ " + str.charAt(i));
-                    System.out.println("string at j ==++ " + str.charAt(j));
-                    System.out.println("parentCounter!!!!! " +parenCounter);
+                final CompoundExpression parenExpression = new ParentheticalExpression();
+                if (parseE(str.substring(1, str.length() - 1), parenExpression) != null) {
 
-                    if((str.charAt(j)==')') && (parenCounter == 0)) {
-                        if (str.charAt(i) == '(' &&
-                                (parseE(str.substring(i + 1, j), parenExpression) != null) &&
-                                str.charAt(j) == ')') {
-                            System.out.println("GOT TO INSIDE PARAM ");
-                            parenExpression.setParent(parent);
-                            parent.addSubexpression(parenExpression);
-                            return parenExpression;
-                        }
-                    }
+                        parenExpression.setParent(parent);
+                        parent.addSubexpression(parenExpression);
+                        return parenExpression;
                 }
             }
         }
@@ -149,11 +141,11 @@ public class SimpleExpressionParser implements ExpressionParser {
         // Checking L
         final Expression litExpression = parseL(str, parent);
         if (litExpression != null) {
-            System.out.println("GOT TO INSIDE PARSEM CHECKING L " + str);
+
             parent.addSubexpression(litExpression);
             return litExpression;
         }
-        System.out.println("GOT TO INSIDE PARSEM INVALID" + str);
+
         return null;
     }
 
@@ -165,10 +157,13 @@ public class SimpleExpressionParser implements ExpressionParser {
      * @return the valid expression, or null if none exists
      */
     private static Expression parseL(String str, CompoundExpression parent) {
+
+        // Empty string is not a literal
         if (str.length() == 0){
             return null;
         }
-        //checks if the string contains [a-z] or is a number
+
+        // Check that a string only contains letters or only contains numbers
         if (str.matches("^[a-z]+$") || str.matches("^[0-9]*$")) {
             final Expression litExpression = new LiteralExpression(str);
             litExpression.setParent(parent);
@@ -190,9 +185,12 @@ public class SimpleExpressionParser implements ExpressionParser {
     public static Expression parseHelper(String str, char op, CompoundExpression parent,
                                          BiFunction<String, CompoundExpression, Expression> m1,
                                          BiFunction<String, CompoundExpression, Expression> m2) {
-        System.out.println("STIRNG IN parseHelper:  " + str);
-        for(int i = 1; i < str.length() -1; i++) {
+
+        // Check each pivot point for a valid operator
+        for(int i = 1; i < str.length() - 1; i++) {
             if(str.charAt(i) == op) {
+
+                // Dummy used to create sub trees
                 CompoundExpressionImpl dummyExpression = new CompoundExpressionImpl();
                 final Expression leftExpression = m1.apply(str.substring(0, i), dummyExpression);
                 final Expression rightExpression = m2.apply(str.substring(i + 1), dummyExpression);
@@ -201,6 +199,7 @@ public class SimpleExpressionParser implements ExpressionParser {
                         (leftExpression != null) &&
                         (rightExpression != null)) {
 
+                    // Replace dummy and add expressions to root node
                     leftExpression.setParent(parent);
                     rightExpression.setParent(parent);
 
@@ -211,7 +210,7 @@ public class SimpleExpressionParser implements ExpressionParser {
                 }
             }
         }
-        System.out.println("PARSE HELPER INVALID ^^^^^^^^^^");
+
         return null;
     }
 }

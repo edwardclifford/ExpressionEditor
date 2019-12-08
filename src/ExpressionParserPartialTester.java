@@ -19,13 +19,6 @@ public class ExpressionParserPartialTester {
     }
 
     @Test
-    public void quickOne () throws ExpressionParseException {
-        final String expressionStr = "(a+b+c)";
-        final String parseTreeStr = "()\n\t+\n\t\ta\n\t\tb\n\t\tc\n";
-        assertEquals(parseTreeStr, _parser.parse(expressionStr, false).convertToString(0));
-    }
-    
-    @Test
     /**
      * Just verifies that the SimpleExpressionParser could be instantiated without crashing.
      */
