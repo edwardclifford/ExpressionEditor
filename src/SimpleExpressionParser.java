@@ -87,8 +87,9 @@ public class SimpleExpressionParser implements ExpressionParser {
 
         // Checking M*X
         final CompoundExpression multExpression = new MultiplicativeExpression();
+        //System.out.println("$$$$$PARSED EXPRESSION: "+parseHelper(str, '*', multExpression, SimpleExpressionParser::parseM, SimpleExpressionParser::parseX));
         if(parseHelper(str, '*', multExpression, SimpleExpressionParser::parseM, SimpleExpressionParser::parseX) != null) {
-            System.out.println("PARSEM ** was FOUND");
+            System.out.println("PARSEM ** was FOUND *********");
             multExpression.setParent(parent);
             parent.addSubexpression(multExpression);
             return multExpression;
@@ -143,6 +144,7 @@ public class SimpleExpressionParser implements ExpressionParser {
         final Expression litExpression = parseL(str, parent);
         if (litExpression != null) {
             System.out.println("CHECKING PARSEL in x");
+
             parent.addSubexpression(litExpression);
             return litExpression;
         }
@@ -160,7 +162,7 @@ public class SimpleExpressionParser implements ExpressionParser {
     private static Expression parseL(String str, CompoundExpression parent) {
 
         //checks if the string contains [a-z] or is a number
-        if (str.matches(".*[a-z].*") || str.contains("[0-9]+")) {
+        if (str.matches("^[a-z]+$") || str.matches("^[0-9]*$")) {
             final Expression litExpression = new LiteralExpression(str);
             litExpression.setParent(parent);
             return litExpression;
@@ -185,6 +187,12 @@ public class SimpleExpressionParser implements ExpressionParser {
         for(int i = 1; i < str.length() -1; i++) {
             final Expression leftExpression = m1.apply(str.substring(0, i), parent);
             final Expression rightExpression = m2.apply(str.substring(i + 1), parent);
+            System.out.println("i #**"+ i);
+            System.out.println("string at i #**"+str.charAt(i));
+            System.out.println("checking op #**"+ op);
+            System.out.println("leftExpression #**"+ leftExpression);
+            System.out.println("rightExpression #**"+ rightExpression);
+
             if ((str.charAt(i) == op) &&
                     (leftExpression != null) &&
                     (rightExpression != null)) {
@@ -194,7 +202,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 
                 parent.addSubexpression(leftExpression);
                 parent.addSubexpression(rightExpression);
-                System.out.println("Parent HELPER: " + parent);
+                System.out.println("Parent HELPER: ------------------------ " + parent);
                 System.out.println("Left HELPER: " + leftExpression);
                 System.out.println("Right HELPER: " + rightExpression);
 

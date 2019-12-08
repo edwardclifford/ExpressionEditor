@@ -42,7 +42,7 @@ public class ExpressionParserPartialTester {
      * Verifies that a specific expression is parsed into the correct parse tree.
      */
     public void testExpression2 () throws ExpressionParseException {
-        final String expressionStr = "13*x";
+        final String expressionStr = "130*x";
         final String parseTreeStr = "*\n\t13\n\tx\n";
         assertEquals(parseTreeStr, _parser.parse(expressionStr, false).convertToString(0));
     }
