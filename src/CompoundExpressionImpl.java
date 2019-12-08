@@ -35,7 +35,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      * Returns a list of the node's children.
      * @return a list of the node's children
      */
-    public List getChildren () {
+    public List<Expression> getChildren () {
         return this._children;
     }
 

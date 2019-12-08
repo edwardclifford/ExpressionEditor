@@ -32,26 +32,31 @@ class AdditiveExpression extends CompoundExpressionImpl {
      * c itself will be removed. This method modifies the expression itself.
      */
     public void flatten () {
-        // TODO Implement, override in each class
+
+        // Flatten all children
+        for (Expression child : this.getChildren()) {
+            child.flatten();
+        }
 
         // Check first child 
-        if (this.childSize() > 0) {
-            Expression child = this.getSubexpressionAt(0);
-            if (child.getClass().equals(this.getClass())) {
+        if (this.childrenSize() > 0) {
+            if (this.getSubexpressionAt(0).getClass().equals(this.getClass())) {
+                AdditiveExpression child = (AdditiveExpression) this.getSubexpressionAt(0);
                 // Matches parent type, replace child with its subchildren
-                this.removeSubexpression(0);
-                for (int i = 0; i < child.childSize(); i++) {
-                    this._children.add(i, child.getExpression(i).flatten()); 
+                this.removeSubexpressionAt(0);
+                for (int i = 0; i < child.childrenSize(); i++) {
+                    this._children.add(i, child.getSubexpressionAt(i)); 
                 }
             }
         }
 
-        if (this.childSize() > 1) {
-            Expression child = this.getSubexpressionAt(this.childSize() - 1);
-            if (child.getClass().equals(this.getClass())) {
-                this.removeSubexpression(this.childSize() - 1);
-                for (int i = 0; i < child.childSize(); i++) {
-                    this.addSubexpression(child.getExpression(i).flatten()); 
+        // Check last child
+        if (this.childrenSize() > 1) {
+            if (this.getSubexpressionAt(this.childrenSize() - 1).getClass().equals(this.getClass())) {
+                AdditiveExpression child = (AdditiveExpression) this.getSubexpressionAt(this.childrenSize() - 1);
+                this.removeSubexpressionAt(this.childrenSize() - 1);
+                for (int i = 0; i < child.childrenSize(); i++) {
+                    this.addSubexpression(child.getSubexpressionAt(i)); 
                 }
             } 
         }
