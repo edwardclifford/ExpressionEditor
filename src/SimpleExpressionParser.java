@@ -184,8 +184,9 @@ public class SimpleExpressionParser implements ExpressionParser {
 
         for(int i = 1; i < str.length() -1; i++) {
             if(str.charAt(i) == op) {
-                final Expression leftExpression = m1.apply(str.substring(0, i), parent);
-                final Expression rightExpression = m2.apply(str.substring(i + 1), parent);
+                CompoundExpressionImpl dummyExpression = new CompoundExpressionImpl();
+                final Expression leftExpression = m1.apply(str.substring(0, i), dummyExpression);
+                final Expression rightExpression = m2.apply(str.substring(i + 1), dummyExpression);
 
                 if ((str.charAt(i) == op) &&
                         (leftExpression != null) &&
