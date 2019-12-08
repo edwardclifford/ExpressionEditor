@@ -7,7 +7,13 @@ class ParentheticalExpression extends CompoundExpressionImpl {
         super();
         // TODO Implement me?
     }
-    
+ 
+    @Override
+    public String getType () {
+        return "Parenthetical";
+    }
+
+   
     @Override
     /**
      * Recursively builds a string that represents the compound expression

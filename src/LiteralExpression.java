@@ -8,6 +8,12 @@ class LiteralExpression extends ExpressionImpl {
         super();
         this.value = val;
     } 
+    
+    @Override
+    public String getType () {
+        return "Literal";
+    }
+
 
     @Override
     /**

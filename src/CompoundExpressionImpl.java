@@ -15,6 +15,11 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
         super();
     }
 
+    @Override
+    public String getType () {
+        return "CompoundExpression";
+    }
+
     /**
      * Adds the specified expression as a child.
      * @param subExpression the child expression to add
