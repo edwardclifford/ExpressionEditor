@@ -34,8 +34,6 @@ public class SimpleExpressionParser implements ExpressionParser {
         CompoundExpressionImpl dummyExpression = new CompoundExpressionImpl();
         Expression parsedStr = parseE(str, dummyExpression);
         if(parsedStr != null) {
-            //parsedStr = (CompoundExpressionImpl) dummyExpression.getSubexpressionAt(0);
-            //System.out.println("PARSED STRING  " + parsedStr.getChildren());
             return parsedStr;
         }
         return null;
@@ -55,10 +53,8 @@ public class SimpleExpressionParser implements ExpressionParser {
         final CompoundExpression addExpression = new AdditiveExpression();
         Expression helpParse = parseHelper(str, '+', addExpression, SimpleExpressionParser::parseE, SimpleExpressionParser::parseM);
         if (helpParse != null) {
-            System.out.println("Parent E: " + parent);
-            addExpression.setParent(parent);
 
-            System.out.println("addExpression E: " + addExpression);
+            addExpression.setParent(parent);
 
             parent.addSubexpression(addExpression);
             return addExpression;
@@ -67,7 +63,6 @@ public class SimpleExpressionParser implements ExpressionParser {
         // Checking M
         final Expression multExpression = parseM(str, parent);
         if (multExpression != null) {
-            System.out.println("PARSE E + WAS NO FOUND");
 
             //multExpression.setParent(parent);
             parent.addSubexpression(multExpression);
@@ -87,9 +82,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 
         // Checking M*X
         final CompoundExpression multExpression = new MultiplicativeExpression();
-        //System.out.println("$$$$$PARSED EXPRESSION: "+parseHelper(str, '*', multExpression, SimpleExpressionParser::parseM, SimpleExpressionParser::parseX));
         if(parseHelper(str, '*', multExpression, SimpleExpressionParser::parseM, SimpleExpressionParser::parseX) != null) {
-            System.out.println("PARSEM ** was FOUND *********");
             multExpression.setParent(parent);
             parent.addSubexpression(multExpression);
             return multExpression;
@@ -107,7 +100,6 @@ public class SimpleExpressionParser implements ExpressionParser {
         // Checking X
         final Expression parenExpression = parseX(str, parent);
          if (parenExpression != null) {
-            System.out.println("PARSEM NO ** FOUND");
             //parenExpression.setParent(parent);
             parent.addSubexpression(parenExpression);
             return parenExpression;
@@ -126,24 +118,27 @@ public class SimpleExpressionParser implements ExpressionParser {
     private static Expression parseX(String str, CompoundExpression parent) {
 
         // Checking (E)
-        for (int i = 1; i < str.length() - 1; i++) {
+        for (int i = 0; i < str.length() - 1; i++) {
+            if (str.charAt(i) == '(') {
+                for (int j = i; j < str.length(); j++) {
+                    final CompoundExpression parenExpression = new ParentheticalExpression();
 
-            final CompoundExpression parenExpression = new ParentheticalExpression();
-
-            if (str.charAt(0) == '(' &&
-                    (parseE(str.substring(i-1, i), parenExpression) != null) &&
-                    str.charAt(i+1) == ')') {
-                System.out.println("PARSEX FOUND A PARENTHISY");
-                parenExpression.setParent(parent);
-                parent.addSubexpression(parenExpression);
-                return parenExpression;
+                    if(str.charAt(j)==')') {
+                        if (str.charAt(i) == '(' &&
+                                (parseE(str.substring(i + 1, j), parenExpression) != null) &&
+                                str.charAt(j) == ')') {
+                            parenExpression.setParent(parent);
+                            parent.addSubexpression(parenExpression);
+                            return parenExpression;
+                        }
+                    }
+                }
             }
         }
 
         // Checking L
         final Expression litExpression = parseL(str, parent);
         if (litExpression != null) {
-            System.out.println("CHECKING PARSEL in x");
 
             parent.addSubexpression(litExpression);
             return litExpression;
@@ -160,7 +155,9 @@ public class SimpleExpressionParser implements ExpressionParser {
      * @return the valid expression, or null if none exists
      */
     private static Expression parseL(String str, CompoundExpression parent) {
-
+        if (str.length() == 0){
+            return null;
+        }
         //checks if the string contains [a-z] or is a number
         if (str.matches("^[a-z]+$") || str.matches("^[0-9]*$")) {
             final Expression litExpression = new LiteralExpression(str);
@@ -188,11 +185,6 @@ public class SimpleExpressionParser implements ExpressionParser {
             if(str.charAt(i) == op) {
                 final Expression leftExpression = m1.apply(str.substring(0, i), parent);
                 final Expression rightExpression = m2.apply(str.substring(i + 1), parent);
-                System.out.println("i #**" + i);
-                System.out.println("string at i #**" + str.charAt(i));
-                System.out.println("checking op #**" + op);
-                System.out.println("leftExpression #**" + leftExpression);
-                System.out.println("rightExpression #**" + rightExpression);
 
                 if ((str.charAt(i) == op) &&
                         (leftExpression != null) &&
@@ -203,9 +195,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 
                     parent.addSubexpression(leftExpression);
                     parent.addSubexpression(rightExpression);
-                    System.out.println("Parent HELPER: ------------------------ " + parent);
-                    System.out.println("Left HELPER: " + leftExpression);
-                    System.out.println("Right HELPER: " + rightExpression);
 
                     return parent;
                 }
