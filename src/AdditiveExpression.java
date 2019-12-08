@@ -33,9 +33,7 @@ class AdditiveExpression extends CompoundExpressionImpl {
      */
     public void flatten () {
         // TODO Implement, override in each class
-        for (Expression child : _children) {
-            System.out.println(child.getType);
-        }
+
     }
 
  

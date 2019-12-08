@@ -185,28 +185,30 @@ public class SimpleExpressionParser implements ExpressionParser {
                                          BiFunction<String, CompoundExpression, Expression> m2) {
 
         for(int i = 1; i < str.length() -1; i++) {
-            final Expression leftExpression = m1.apply(str.substring(0, i), parent);
-            final Expression rightExpression = m2.apply(str.substring(i + 1), parent);
-            System.out.println("i #**"+ i);
-            System.out.println("string at i #**"+str.charAt(i));
-            System.out.println("checking op #**"+ op);
-            System.out.println("leftExpression #**"+ leftExpression);
-            System.out.println("rightExpression #**"+ rightExpression);
+            if(str.charAt(i) == op) {
+                final Expression leftExpression = m1.apply(str.substring(0, i), parent);
+                final Expression rightExpression = m2.apply(str.substring(i + 1), parent);
+                System.out.println("i #**" + i);
+                System.out.println("string at i #**" + str.charAt(i));
+                System.out.println("checking op #**" + op);
+                System.out.println("leftExpression #**" + leftExpression);
+                System.out.println("rightExpression #**" + rightExpression);
 
-            if ((str.charAt(i) == op) &&
-                    (leftExpression != null) &&
-                    (rightExpression != null)) {
+                if ((str.charAt(i) == op) &&
+                        (leftExpression != null) &&
+                        (rightExpression != null)) {
 
-                leftExpression.setParent(parent);
-                rightExpression.setParent(parent);
+                    leftExpression.setParent(parent);
+                    rightExpression.setParent(parent);
 
-                parent.addSubexpression(leftExpression);
-                parent.addSubexpression(rightExpression);
-                System.out.println("Parent HELPER: ------------------------ " + parent);
-                System.out.println("Left HELPER: " + leftExpression);
-                System.out.println("Right HELPER: " + rightExpression);
+                    parent.addSubexpression(leftExpression);
+                    parent.addSubexpression(rightExpression);
+                    System.out.println("Parent HELPER: ------------------------ " + parent);
+                    System.out.println("Left HELPER: " + leftExpression);
+                    System.out.println("Right HELPER: " + rightExpression);
 
-                return parent;
+                    return parent;
+                }
             }
         }
         return null;
