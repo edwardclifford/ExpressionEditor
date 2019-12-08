@@ -104,25 +104,4 @@ public class ExpressionParserPartialTester {
         final String expressionStr = "()()";
         _parser.parse(expressionStr, false);
     }
-
-    @Test
-    /**
-     * Checks instantiation and function of all types of classes
-     */
-    public void testExpressions () {
-        final CompoundExpression addType = new AdditiveExpression();
-        final CompoundExpression multType = new MultiplicativeExpression();
-        final CompoundExpression parenType = new ParentheticalExpression();
-        final Expression varType = new LiteralExpression("x");
-        final Expression numType = new LiteralExpression("1");
-
-        multType.addSubexpression(varType);
-        multType.addSubexpression(numType);
-
-        addType.addSubexpression(multType);
-        addType.addSubexpression(numType); 
-
-        System.out.println(addType.convertToString(0));
-        
-    }
 }
