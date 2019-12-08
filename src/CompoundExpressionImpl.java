@@ -6,6 +6,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      * ArrayList of all children and subtrees contained in the Compound Expression.
      */
     public List<Expression> _children = new ArrayList<Expression>();
+    public Collection<Expression> _seenChildren = new HashSet<Expression>();
 
     /**
      * Implements a non-terminal expression
@@ -19,7 +20,10 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      * @param subExpression the child expression to add
      */
     public void addSubexpression (Expression subExpression) {
-        this._children.add(subExpression);
+        if (this._seenChildren.contains(subExpression)) {
+            this._children.add(subExpression);
+            this._seenChildren.add(subExpression);
+        }
     }
 
     /**
