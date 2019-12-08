@@ -17,6 +17,7 @@ class LiteralExpression extends ExpressionImpl {
      */
     public void convertToString (StringBuilder stringBuilder, int indentLevel) {
         // Jump to starting indent level
+        System.out.println("Adding a literal to string");
         indent(stringBuilder, indentLevel);
         // Add current expression representation
         stringBuilder.append(this.value + "\n");
