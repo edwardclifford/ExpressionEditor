@@ -28,7 +28,10 @@ class MultiplicativeExpression extends CompoundExpressionImpl {
     public void updateNode () {
         this.container.getChildren().clear();
         for (Expression child : this.getChildren()) {
-            this.container.getChildren().addAll(child.getNode(), new Text("*"));
+            child.setColor(this.color);
+            final Text mult = new Text("*");
+            mult.setFill(this.color);
+            this.container.getChildren().addAll(child.getNode(), mult);
         }
         this.container.getChildren().remove(this.container.getChildren().size() - 1);
     }

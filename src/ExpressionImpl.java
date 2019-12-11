@@ -1,4 +1,6 @@
 import javafx.scene.Node;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public  class ExpressionImpl implements Expression {
@@ -7,6 +9,16 @@ public  class ExpressionImpl implements Expression {
      * Pointer to the Expression's parent
      */
     public CompoundExpression parent;
+
+    /**
+     * JavaFX node that contains all sub nodes
+     */
+    public HBox container = new HBox();
+
+    /**
+     * Current color of the text of the Expression
+     */
+    public Color color = new Color(0, 0, 0, 1.0);
 
     /**
      * Implements an expression
@@ -54,6 +66,14 @@ public  class ExpressionImpl implements Expression {
      */
     public Node getNode () {
         return new Text("Expression");
+    }
+
+    /**
+     * Sets the color of the JavaFX node to a specific color
+     * @param color the color being set
+     */
+    public void setColor (Color color) {
+        this.color = color;
     }
 
     /**

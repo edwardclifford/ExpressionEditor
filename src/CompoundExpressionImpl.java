@@ -15,11 +15,6 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     public Collection<Expression> _seenChildren = new HashSet<Expression>();
 
     /**
-     * JavaFX node that contains all sub nodes
-     */
-    public HBox container = new HBox();
-
-    /**
      * Implements a non-terminal expression
      */
     CompoundExpressionImpl () {

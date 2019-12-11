@@ -1,5 +1,6 @@
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 class LiteralExpression extends ExpressionImpl {
@@ -9,10 +10,6 @@ class LiteralExpression extends ExpressionImpl {
      */
     public String value;
 
-    /**
-     * Node containing value of the literal
-     */
-    public HBox container;
     /**
      * Implements a terminal expression
      */
@@ -28,7 +25,18 @@ class LiteralExpression extends ExpressionImpl {
      * @return the JavaFX node associated with this expression.
      */
     public Node getNode () {
+        updateNode();
         return this.container;
+    }
+
+    /**
+     * Updates the text representation of the literal
+     * @return
+     */
+    public void updateNode() {
+        final Text updatedText = new Text(this.value);
+        updatedText.setFill(this.color);
+        this.container = new HBox(updatedText);
     }
 
     @Override

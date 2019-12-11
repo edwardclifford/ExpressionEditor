@@ -48,6 +48,12 @@ interface Expression {
 	Node getNode ();
 
 	/**
+	 * Sets the color of the JavaFX node to a specific color
+	 * @param color the color being set
+	 */
+	void setColor (Color color);
+
+	/**
 	 * Recursively flattens the expression as much as possible
 	 * throughout the entire tree. Specifically, in every multiplicative
 	 * or additive expression x whose first or last

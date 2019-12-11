@@ -31,10 +31,14 @@ class AdditiveExpression extends CompoundExpressionImpl {
     public void updateNode () {
         this.container.getChildren().clear();
         for (Expression child : this.getChildren()) {
-            this.container.getChildren().addAll(child.getNode(), new Text("+"));
+            child.setColor(this.color);
+            final Text plus = new Text("+");
+            plus.setFill(this.color);
+            this.container.getChildren().addAll(child.getNode(), plus);
         }
         this.container.getChildren().remove(this.container.getChildren().size() - 1);
     }
+
     @Override
     /**
      * Creates and returns a deep copy of the expression.
