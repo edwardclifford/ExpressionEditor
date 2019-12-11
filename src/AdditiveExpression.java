@@ -21,7 +21,7 @@ class AdditiveExpression extends CompoundExpressionImpl {
      * @return the JavaFX node associated with this expression.
      */
     public Node getNode () {
-        HBox addContainer = new HBox(8);
+        HBox addContainer = new HBox();
         final ObservableList<Node> nodeChildren = addContainer.getChildren();
         for (Expression child : this.getChildren()) {
             nodeChildren.addAll(child.getNode(), new Text("+"));
