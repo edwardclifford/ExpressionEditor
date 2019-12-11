@@ -1,3 +1,7 @@
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+
 class LiteralExpression extends ExpressionImpl {
 
     /**
@@ -11,7 +15,16 @@ class LiteralExpression extends ExpressionImpl {
     LiteralExpression (String val) {
         super();
         this.value = val;
-    } 
+    }
+
+    @Override
+    /**
+     * Returns the JavaFX node associated with this expression.
+     * @return the JavaFX node associated with this expression.
+     */
+    public Node getNode () {
+        return new Text(value);
+    }
 
     @Override
     /**

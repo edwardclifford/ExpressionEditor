@@ -17,9 +17,11 @@ class ParentheticalExpression extends CompoundExpressionImpl {
      * @return the JavaFX node associated with this expression.
      */
     public Node getNode () {
-        //TODO implement me
-        new HBox();
-        return ;
+        Text text1 = new Text("(");
+        Text text2 = new Text(")");
+        Expression exprs = this.getSubexpressionAt(0);
+        HBox hbox = new HBox(text1, (Node) exprs, text2);
+        return hbox;
     }
 
     @Override
