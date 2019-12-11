@@ -21,7 +21,7 @@ class MultiplicativeExpression extends CompoundExpressionImpl {
         HBox addContainer = new HBox();
         final ObservableList<Node> nodeChildren = addContainer.getChildren();
         for (Expression child : this.getChildren()) {
-            nodeChildren.addAll(child.getNode(), new Text("+"));
+            nodeChildren.addAll(child.getNode(), new Text("*"));
         }
         nodeChildren.remove(nodeChildren.size() - 1);
 
