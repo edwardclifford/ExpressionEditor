@@ -10,11 +10,16 @@ class LiteralExpression extends ExpressionImpl {
     public String value;
 
     /**
+     * Node containing value of the literal
+     */
+    public HBox container;
+    /**
      * Implements a terminal expression
      */
     LiteralExpression (String val) {
         super();
         this.value = val;
+        this.container = new HBox(new Text(val));
     }
 
     @Override
@@ -23,9 +28,7 @@ class LiteralExpression extends ExpressionImpl {
      * @return the JavaFX node associated with this expression.
      */
     public Node getNode () {
-        Text text1 = new Text(value);
-        HBox hbox = new HBox(text1);
-        return hbox;
+        return this.container;
     }
 
     @Override

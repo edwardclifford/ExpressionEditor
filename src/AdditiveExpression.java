@@ -21,16 +21,20 @@ class AdditiveExpression extends CompoundExpressionImpl {
      * @return the JavaFX node associated with this expression.
      */
     public Node getNode () {
-        HBox addContainer = new HBox();
-        final ObservableList<Node> nodeChildren = addContainer.getChildren();
-        for (Expression child : this.getChildren()) {
-            nodeChildren.addAll(child.getNode(), new Text("+"));
-        }
-        nodeChildren.remove(nodeChildren.size() - 1);
-
-        return addContainer;
+        updateNode();
+        return this.container;
     }
 
+    /**
+     * Updates the container node object with the current children of the expression
+     */
+    public void updateNode () {
+        this.container.getChildren().clear();
+        for (Expression child : this.getChildren()) {
+            this.container.getChildren().addAll(child.getNode(), new Text("+"));
+        }
+        this.container.getChildren().remove(this.container.getChildren().size() - 1);
+    }
     @Override
     /**
      * Creates and returns a deep copy of the expression.

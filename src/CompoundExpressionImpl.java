@@ -1,3 +1,5 @@
+import javafx.scene.layout.HBox;
+
 import java.util.*;
 
 public class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpression {
@@ -11,6 +13,11 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      * Hashset of all children, used to avoid adding the same child twice
      */
     public Collection<Expression> _seenChildren = new HashSet<Expression>();
+
+    /**
+     * JavaFX node that contains all sub nodes
+     */
+    public HBox container = new HBox();
 
     /**
      * Implements a non-terminal expression
