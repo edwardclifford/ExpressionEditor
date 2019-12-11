@@ -19,8 +19,8 @@ class ParentheticalExpression extends CompoundExpressionImpl {
     public Node getNode () {
         Text text1 = new Text("(");
         Text text2 = new Text(")");
-        Expression exprs = this.getSubexpressionAt(0);
-        HBox hbox = new HBox(text1, (Node) exprs, text2);
+        Expression expression = this.getSubexpressionAt(0);
+        HBox hbox = new HBox(text1, (Node) this.getSubexpressionAt(0), text2);
         return hbox;
     }
 
