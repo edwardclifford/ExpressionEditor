@@ -1,3 +1,5 @@
+import javafx.scene.Node;
+
 public  class ExpressionImpl implements Expression {
 
     /**
@@ -44,6 +46,14 @@ public  class ExpressionImpl implements Expression {
      * c itself will be removed. This method modifies the expression itself.
      */
     public void flatten () {}
+
+    /**
+     * Returns the JavaFX node associated with this expression.
+     * @return the JavaFX node associated with this expression.
+     */
+    public Node getNode () {
+        return new Node() {};
+    }
 
     /**
      * Creates a String representation by recursively printing out (using indentation) the
