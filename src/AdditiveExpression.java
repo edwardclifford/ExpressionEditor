@@ -23,7 +23,7 @@ class AdditiveExpression extends CompoundExpressionImpl {
             copyExpression.addSubexpression(child);
         }
 
-        return copyExpression; 
+        return copyExpression;
     }
 
     @Override
