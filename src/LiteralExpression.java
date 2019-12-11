@@ -23,7 +23,9 @@ class LiteralExpression extends ExpressionImpl {
      * @return the JavaFX node associated with this expression.
      */
     public Node getNode () {
-        return new Text(value);
+        Text text1 = new Text(value);
+        HBox hbox = new HBox(text1);
+        return hbox;
     }
 
     @Override
