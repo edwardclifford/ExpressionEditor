@@ -1,4 +1,5 @@
 import javafx.scene.Node;
+import javafx.scene.text.Text;
 
 public  class ExpressionImpl implements Expression {
 
@@ -52,7 +53,7 @@ public  class ExpressionImpl implements Expression {
      * @return the JavaFX node associated with this expression.
      */
     public Node getNode () {
-        return new Node() {};
+        return new Text("Expression");
     }
 
     /**
