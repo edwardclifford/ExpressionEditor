@@ -20,7 +20,7 @@ class ParentheticalExpression extends CompoundExpressionImpl {
         Text text1 = new Text("(");
         Text text2 = new Text(")");
         Expression expression = this.getSubexpressionAt(0);
-        HBox hbox = new HBox(text1, (Node) this.getSubexpressionAt(0), text2);
+        HBox hbox = new HBox(text1, expression.getNode(), text2);
         return hbox;
     }
 
