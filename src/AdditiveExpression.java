@@ -1,3 +1,6 @@
+import javafx.scene.Node;
+import javafx.scene.text.Text;
+
 class AdditiveExpression extends CompoundExpressionImpl {
 
     /**
@@ -5,6 +8,15 @@ class AdditiveExpression extends CompoundExpressionImpl {
      */
     AdditiveExpression () {
         super();
+    }
+
+    @Override
+    /**
+     * Returns the JavaFX node associated with this expression.
+     * @return the JavaFX node associated with this expression.
+     */
+    public Node getNode () {
+        return new Text("+");
     }
 
     @Override

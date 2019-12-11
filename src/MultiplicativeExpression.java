@@ -1,3 +1,6 @@
+import javafx.scene.Node;
+import javafx.scene.text.Text;
+
 class MultiplicativeExpression extends CompoundExpressionImpl {
 
     /**
@@ -6,6 +9,16 @@ class MultiplicativeExpression extends CompoundExpressionImpl {
     MultiplicativeExpression () {
         super();
     }
+
+    @Override
+    /**
+     * Returns the JavaFX node associated with this expression.
+     * @return the JavaFX node associated with this expression.
+     */
+    public Node getNode () {
+        return new Text("*");
+    }
+
 
     @Override
     /**

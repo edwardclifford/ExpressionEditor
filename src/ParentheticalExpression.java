@@ -1,3 +1,7 @@
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+
 class ParentheticalExpression extends CompoundExpressionImpl {
 
     /**
@@ -5,6 +9,17 @@ class ParentheticalExpression extends CompoundExpressionImpl {
      */
     ParentheticalExpression () {
         super();
+    }
+
+    @Override
+    /**
+     * Returns the JavaFX node associated with this expression.
+     * @return the JavaFX node associated with this expression.
+     */
+    public Node getNode () {
+        //TODO implement me
+        new HBox();
+        return ;
     }
 
     @Override
