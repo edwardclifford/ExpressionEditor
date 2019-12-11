@@ -1,4 +1,6 @@
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 class MultiplicativeExpression extends CompoundExpressionImpl {
@@ -16,9 +18,15 @@ class MultiplicativeExpression extends CompoundExpressionImpl {
      * @return the JavaFX node associated with this expression.
      */
     public Node getNode () {
-        return new Text("*");
-    }
+        HBox addContainer = new HBox(8);
+        final ObservableList<Node> nodeChildren = addContainer.getChildren();
+        for (Expression child : this.getChildren()) {
+            nodeChildren.addAll(child.getNode(), new Text("+"));
+        }
+        nodeChildren.remove(nodeChildren.size() - 1);
 
+        return addContainer;
+    }
 
     @Override
     /**
