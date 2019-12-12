@@ -37,7 +37,8 @@ class LiteralExpression extends ExpressionImpl {
         final Text updatedText = new Text(this.value);
         updatedText.setFill(this.color);
         updatedText.setFont(this.font);
-        this.container = new HBox(updatedText);
+        this.container.getChildren().clear();
+        this.container.getChildren().add(updatedText);
     }
 
     @Override

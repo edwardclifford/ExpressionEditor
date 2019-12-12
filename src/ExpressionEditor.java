@@ -127,32 +127,20 @@ public class ExpressionEditor extends Application {
      * @param event
      */
     public void focus(MouseEvent event) {
-        final int xCoord = (int) event.getX();
-        final int yCoord = (int) event.getY();
-		System.out.println(xCoord);
-		System.out.println(yCoord);
+		final int xCoord = (int) event.getX();
+		final int yCoord = (int) event.getY();
 		boolean childFound = false;
-		System.out.println("Click detected");
 
-        if (highlighted instanceof CompoundExpressionImpl) {
-        	System.out.println("1");
-            CompoundExpressionImpl focusExpression = (CompoundExpressionImpl) highlighted;
-			System.out.println(focusExpression.getBounds().getMaxX());
-			System.out.println(focusExpression.getBounds().getMinX());
-			System.out.println(focusExpression.getBounds().getMaxY());
-			System.out.println(focusExpression.getBounds().getMinY());
+		if (highlighted instanceof CompoundExpressionImpl) {
+			CompoundExpressionImpl focusExpression = (CompoundExpressionImpl) highlighted;
 
-            if (focusExpression.containsPoint(xCoord, yCoord)) {
-                List<Expression> children = focusExpression.getChildren();
-				System.out.println("2");
-
+			if (focusExpression.containsPoint(xCoord, yCoord)) {
+				List<Expression> children = focusExpression.getChildren();
 
 				//iterate through immediate children to see which one has been clicked
-				for(Expression child : children) {
-					System.out.println("Click inside of child");
-					if(child.containsPoint(xCoord, yCoord)) {
+				for (Expression child : children) {
+					if (child.containsPoint(xCoord, yCoord)) {
 						childFound = true;
-						System.out.println("Found child");
 						//TODO make a box around highlighted child
 						highlighted.setBorder(Expression.NO_BORDER);
 						child.setBorder(Expression.RED_BORDER);
@@ -161,24 +149,11 @@ public class ExpressionEditor extends Application {
 						return;
 					}
 				}
-				//if the highlighted expression has no children
-				if (!childFound) {
-				    //Case where the click was in no subchild of the highlighted expression
-					//TODO undo the box if there is one
-					highlighted.setBorder(Expression.NO_BORDER);
-					//clear focus
-					highlighted = expression;
-				}
-
-            }
-            else {
-            	//Case where the highlighted expression is a literal
-				//TODO undo the box if there is one
-				highlighted.setBorder(Expression.NO_BORDER);
-				//clear focus
-				highlighted = expression;
 			}
-        }
+		}
+		// Reset focus if no conditions are met
+		highlighted.setBorder(Expression.NO_BORDER);
+		highlighted = expression;
     }
 
     /**

@@ -27,7 +27,8 @@ public  class ExpressionImpl implements Expression {
     /**
      * Current size of the text of the Expression
      */
-    public Font font = new Font(20);
+    public Font font = new Font(24);
+
     /**
      * Implements an expression
      */
