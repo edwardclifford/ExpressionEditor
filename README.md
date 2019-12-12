@@ -12,6 +12,8 @@ In this project you will build an interactive (event-driven) mathematical expres
 the tool you build will allow the user to type in a mathematical expression, which will then be parsed into an "expression tree"
 and then displayed graphically. Then, the user will be able to drag-and-drop different subexpressions -- at <b>arbitrary levels of 
 granularity</b> -- so as to rearrange the expression <b>while preserving the same mathematical semantics</b>.
+To get an immediate sense of what this will look like,
+check out <a href="https://web.cs.wpi.edu/~cs2103/b19/Project5/ExpressionEditor.mp4">this demo video</a>.
 
 <h2>Example</h2>
 Suppose the user is editing the expression <tt>2*x + 3*y + 4*z + (7+6*z)</tt>. Because of commutativity of addition, this expression can be
@@ -141,14 +143,148 @@ The <tt>flatten</tt> method should recursively flatten the entire <tt>Expression
 Note that you are only required to flatten the <tt>AdditiveExpression</tt> and <tt>MultiplicativeExpression</tt>
 objects.
 
+<h1>R2: Editing Mathematical Expressions</h1>
+The overall goal of R2 is to replicate all the functionality in the demo video above as closely as possible. In the
+sections below, you will see specific functionality marked with "F1", "B1", etc.; these represent the specific
+functionality that will be graded.<p>
+
+There are several key features of the GUI-based editor:
+<ul>
+<li>The user can enter an expression in the textbox, click the Parse button, and have it displayed within the window.</li>
+<li>The user can click on an expression and thereby change the <b>focus</b>.</li>
+<li>The user can drag+drop the focused expression into a different location <b>among its siblings</b>.</li>
+<li>Drag+drop affects not only the visual representation of the expression, but also the underlying tree-based representation.
+In particular, you should be able to observe the change in the order of the siblings when you call
+<tt>parent.convertToString()</tt>.</li>
+</ul>
+
+<h2>Parsing and displaying the Expression</h2>
+When the expression string typed by the user is parsed, the <tt>SimpleExpressionParser</tt> should return an object of type
+<tt>Expression</tt>. The <tt>ExpresssionEditor</tt> class will then call the <tt>getNode()</tt> method of this <tt>Expression</tt>
+object and display it within the window (<b>B1</b>).<p>
+
+Note that, since you actually need to display a JavaFX Node for every (sub-)expression, you should pass a value of
+<tt>true</tt> for <tt>withJavaFXControls</tt>.
+
+<h2>Focus</h2>
+The user can select a subexpression and thereby give it the "focus", denoted by a red box around the focused node.
+Focus is important because it denotes the subexpression that can be dragged+dropped among its siblings.
+The focus behavior you implement must adhere to the following
+rules:
+<ul>
+  <li>Initially (after parsing a string), there is no focus.</li>
+  <li>If there is no current focus, and if the user clicks on location (<em>x</em>,<em>y</em>) that is contained within the
+  rectangular bounds <em>b</em> of some child expression <em>c</em> whose parent is the root of the entire expression tree, 
+  then <em>c</em> receives the focus (<b>F1</b>). (<b>Note</b>: the reason why the root itself never receives the focus is that, since the
+  root has no parent, then it cannot be moved anywhere.)</li>
+  <li>Suppose the currently focused subexpression <em>p</em> has rectangular bounds <em>b</em>:
+    <ul>
+    <li>If the user clicks on an (<em>x</em>,<em>y</em>) location that <b>is not</b> contained within <em>b</em>,
+then the focus is cleared -- i.e., nothing is focused anymore (<b>F2</b>).</li>
+    <li>If the user clicks on an (<em>x</em>,<em>y</em>) location that <b>is</b> contained within <em>b</em>; if there exists a direct child expression <em>c</em>  of <em>p</em>; and if the rectangular bounds of <em>c</em> contains (<em>x</em>,<em>y</em>), then the focus is set to <em>c</em> (<b>F3</b>). ("Direct child" means that <em>c</em>'s parent is <em>p</em>.)</li>
+    <li>If the user clicks on an (<em>x</em>,<em>y</em>) location that <b>is</b> contained within <em>b</em>, but there does not exist any child expression of <em>p</em> whose bounds also contains (<em>x</em>,<em>y</em>), then the focus is cleared (<b>F4</b>).</li>
+    </ul>
+  </li>
+</ul>
+
+<b>Important note</b>: In an additive or multiplicative expression, the operator symbol itself (<tt>+</tt>,<tt>*</tt>, or <tt>*</tt>)
+should <b>not</b> count as part of the child expression (<b>F5</b>). For example, the expression <tt>1+2</tt> is an additive expression with
+two child nodes, <tt>1</tt> and <tt>2</tt>. Clicking on the <tt>+</tt> symbol should <b>clear</b> the focus since an (<em>x</em>,
+<em>y</em>) positioned directly on  top of the <tt>+</tt>  is not contained within the rectangular bounds of any child expression
+of <tt>1+2</tt>.
+
+
+<h2>Drag+drop</h2>
+<h3>Drag</h3>
+As soon as the user presses the mouse button on a subexpression that already has the focus, then a <b>deep copy</b> of that
+focused expression should be made. One copy should remain at the same location where the subexpression already was and
+should become <b>ghosted</b>, i.e., displayed in a light-grey color (<b>G1</b>). The other copy should be moved according to where
+the user moves the mouse, i.e., is dragged across the GUI (<b>D1</b>).
+
+<h3>Drop</h3>
+A child expression <em>c</em> that is currently being dragged can be relocated (through "dropping" it) to any index
+among its siblings. Note, however, that dragging+dropping <em>c</em>  should <b>not</b> affect the relative ordering of its siblings (<b>D2</b>).
+As an example, suppose the child expression <tt>2</tt>  in the expression <tt>1+2+3</tt> is being dragged. Then, depending
+on the (<em>x</em>,<em>y</em>) location of where <tt>2</tt> is dropped, the expression could be rearranged into one of three
+possible "configurations":
+<ul>
+<li><tt>1+2+3</tt></li>
+<li><tt>2+1+3</tt></li>
+<li><tt>1+3+2</tt></li>
+</ul>
+Note that dragging+dropping the <tt>2</tt> should <b>not</b> result in any of the following expressions (since they would require
+a change in the relative ordering of <tt>2</tt>'s siblings):
+<ul>
+<li><tt>3+2+1</tt></li>
+<li><tt>2+3+1</tt></li>
+<li><tt>3+1+2</tt></li>
+</ul>
+To decide when, based on the current (<em>x</em>,<em>y</em>) position of the dragged child expression <em>c</em>, to update the
+index of <em>c</em> among its siblings (<b>D3</b>), you should implement the  
+following  strategy (<b>D3</b>):
+<ol>
+<li>When the user first begins dragging <em>c</em>, compute the set of all valid configurations of <em>c</em>'s parent
+that could result by dragging and dropping <em>c</em>. (In the example above, these would be <tt>1+2+3</tt>,
+<tt>2+1+3</tt>, and <tt>1+3+2</tt>.)</li>
+<li>Compute the (<em>x</em>,<em>y</em>) location of where <em>c</em> would appear within each of the possible configurations
+computed during the previous step. You will actually only need the <em>x</em> values; let <em>x<sub>i</sub></em> denote the <em>x</em> coordinate
+where the <em>c</em> appears in configuration <em>i</em>.</li>
+<li>Whenever <em>c</em> is dragged to position (<em>x</em>,<em>y</em>), find the configuration <em>i</em> (among all the configurations)
+whose <em>x<sub>i</sub></em> value is closest to <em>x</em>.</li>
+</ol>
+Note that getting feature <b>D3</b> exactly right is tricky.
+Below is an example of a configuration that should <em>not</em> occur if the mouse is at rest (i.e., not moving)
+and your program is implemented correctly.<br>
+<img src="https://web.cs.wpi.edu/~cs2103/b19/Project5/shouldNeverHappen.png" width="500"/><br>
+Notice
+how the ghosted expression of <tt>3*y</tt> is <em>not</em> where it should be. This situation was triggered (in a buggy implementation)
+by dragging the <tt>3*y</tt> expression <em>very fast</em>.
+(It took me several tries to generate this.) Also, in a fully correct implementation, there should be a "critical point" (x coordinate)
+when the expression shifts back and forth between positions in its parent. If you don't quite implement this correctly,
+then you may have to move the expression back and forth a <em>considerable distance</em> before the swap occurs.<p>
+
+Finally, at all times, the "ghost" expression should be moved to reflect where <em>c</em> <em>would</em> be moved <em>if</em> the user released
+the mouse (i.e., "dropped" <em>c</em>) (<b>G2</b>).<p>
+
+
+<h3>Modifying the underlying expression tree</h3>
+After the user has dragged+dropped a child expression to a different location among its siblings, the expression tree
+should reflect this change. In particular, the order of the lines of output  of <tt>convertToString()</tt> should reflect
+the new ordering (<b>E1</b>). As an example, suppose we drag+drop the <tt>2</tt> in the expression <tt>1+2</tt> to be to the left of the
+<tt>1</tt>, so that the new expression becomes <tt>2+1</tt>. Then calling <tt>convertToString()</tt> on the
+modified expression tree should produce:
+<pre>
++
+	2
+	1
+</pre>
+<b>In order to enable us to test whether you implemented this correctly, you are required to call
+<tt>convertToString(0)</tt> and print the results (using <tt>System.out.println()</tt>) whenever the user "drops" an expression.</b>
+
 <h1>Requirements</h1>
 <ol>
-<li>R1 (50 points): Build a parser to convert a <tt>String</tt> into an <tt>Expression</tt>. Your parser must be
-able to handle the operations of <b>addition</b> (<tt>+</tt>) and <b>multiplication</b> (<tt>*</tt>). It
-must also be able to handle <b>arbitrarily deeply nested balanced parentheses</b> (e.g., <tt>((2+(((z)))+3))</tt>).
-Note, however, that you do <b>not</b> have to handle subtraction or division. <b>Note</b>: you <b>must</b>
-complete this assignment using a CFG. (While it might be possible to hack together something that works for this project
-without one, the only strategy that scales to more complex languages is based on CFGs.)</li>
+<li>R2 (50 points): Build a GUI-based interactive drag-and-drop mathematical expression editor, based on the
+parser you coded in R1. In particular, we will manually verify that you implement the following aspects of the
+project correctly:
+	<ul>
+	<li><b>B1</b>: 7 points</li>
+	<li><b>F1</b>: 2 points</li>
+	<li><b>F2</b>: 2 points</li>
+	<li><b>F3</b>: 2 points</li>
+	<li><b>F4</b>: 2 points</li>
+	<li><b>F5</b>: 1 points</li>
+	<li><b>G1</b>: 2 points</li>
+	<li><b>G2</b>: 2 points</li>
+	<li><b>D1</b>: 4 points</li>
+	<li><b>D2</b>: 2 points</li>
+	<li><b>D3</b>: 6 points</li>
+	<li><b>E1</b>: 8 points</li>
+	</ul>
+	We will also assign 10 points for design &amp; style.
+</li>
+<li>Extra credit (4 points): Implement <b>animations</b> so that, while the user is dragging-and-dropping a sub-expression,
+the ghost moves smoothly instead of "jumping" from one location to another. (You might use the JavaFX <tt>TranslateTransition</tt>
+class.)</li>
 </ol>
 
 <h1>Design and Style</h1>
@@ -185,19 +321,16 @@ for using the actual type of the object you instantiate (e.g., you need to acces
 You may work as a team on this project; the maximum team size is 2.
 
 <h1>Getting started</h1>
-<h2>R1</h2>
+<h2>R2</h2>
 <ol>
-<li>Please download the <a href="https://web.cs.wpi.edu/~cs2103/b19/Project5/R1.zip">R1 starter file</a>.</li>
-<li>Have a look at the <tt>ExpressionParserPartialTester.java</tt> file, which includes some -- but not all -- of the test cases with which we will test your expression parser.</li>
-<li>Write the parse methods necessary to implement the <tt>SimpleExpressionParser</tt>  that  we will
-test as part of R1.</li>
+<li>Please download the <a href="https://web.cs.wpi.edu/~cs2103/b19/Project5/R2.zip">R2 starter file</a>.</li>
+<li>Have a look at the <tt>ExpressionEditor.java</tt> file, which includes some starter code for the GUI.</li>
 </ol>
 
 
 <h1>How,  What, and When to Submit</h1>
-<h2>R1</h2>
+<h2>R2</h2>
 <ul>
-<li>Create a Zip file containing only and all those files necessary to test your parser using <tt>ExpressionParserPartialTester.java</tt>.</li>
-<li><b>Submission deadline for R1</b>: Saturday, Dec 7, at 11:59pm EDT.</li>
+<li>Create a Zip file containing only and all those files necessary to finish implementing the <tt>ExpressionEditor.java</tt>.</li>
+<li><b>Submission deadline for R2</b>: Friday, Dec 13, at 11:59pm EDT.</li>
 </ul> 
-
