@@ -91,7 +91,8 @@ class AdditiveExpression extends CompoundExpressionImpl {
                 // Matches parent type, replace child with its subchildren at the beginning.
                 this.removeSubexpressionAt(0);
                 for (int i = 0; i < child.childrenSize(); i++) {
-                    this._children.add(i, child.getSubexpressionAt(i)); 
+                    child.getSubexpressionAt(i).setParent(this);
+                    this._children.add(i, child.getSubexpressionAt(i));
                 }
             }
         }
@@ -104,7 +105,9 @@ class AdditiveExpression extends CompoundExpressionImpl {
                 // Child matches parent, overwrite it with it's children at the end
                 this.removeSubexpressionAt(this.childrenSize() - 1);
                 for (int i = 0; i < child.childrenSize(); i++) {
-                    this.addSubexpression(child.getSubexpressionAt(i)); 
+                    child.getSubexpressionAt(i).setParent(this);
+                    this._children.add(i, child.getSubexpressionAt(i));
+                    this.addSubexpression(child.getSubexpressionAt(i));
                 }
             } 
         }

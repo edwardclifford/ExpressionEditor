@@ -39,6 +39,7 @@ public class SimpleExpressionParser implements ExpressionParser {
         Expression parsedStr = parseE(str, dummyExpression);
 
         if (parsedStr != null) {
+            parsedStr.setParent(null);
             return parsedStr;
         }
 
