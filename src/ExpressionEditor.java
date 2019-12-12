@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import jdk.jfr.Experimental;
 
 public class ExpressionEditor extends Application {
 	public static void main (String[] args) {
@@ -58,6 +59,16 @@ public class ExpressionEditor extends Application {
 	 */
 	private final ExpressionParser expressionParser = new SimpleExpressionParser();
 
+	/**
+	 * the originally parsed expression
+	 */
+	private Expression expression;
+
+	/**
+	 * Focus on the expression that is clicked by the user
+	 */
+	private static Expression highlighted;
+
 	@Override
 	public void start (Stage primaryStage) {
 		primaryStage.setTitle("Expression Editor");
@@ -76,7 +87,8 @@ public class ExpressionEditor extends Application {
 				// Try to parse the expression
 				try {
 					// Success! Add the expression's Node to the expressionPane
-					final Expression expression = expressionParser.parse(textField.getText(), true);
+					expression = expressionParser.parse(textField.getText(), true);
+					highlighted = expression;
 					System.out.println(expression.convertToString(0));
 					expressionPane.getChildren().clear();
 					expressionPane.getChildren().add(expression.getNode());
@@ -114,18 +126,49 @@ public class ExpressionEditor extends Application {
      * When mouse is pressed, set focus
      * @param event
      */
-    public void focus(MouseEvent event) {
+    public static void focus(MouseEvent event) {
         int xCoord = (int) event.getX();
         int yCoord = (int) event.getY();
+        boolean childFound = false;
 
-        if (expression instanceof CompoundExpressionImpl) {
-            CompoundExpressionImpl expression = new CompoundExpressionImpl();
-            if (expression.contains(xCoord, yCoord)) {
-                CompoundExpressionImpl child = (CompoundExpressionImpl) expression.getChildren();
-                child.getBounds();
+        if (highlighted instanceof CompoundExpressionImpl) {
+            CompoundExpressionImpl focusExpression = (CompoundExpressionImpl) highlighted;
+
+            if (focusExpression.contains(xCoord, yCoord)) {
+                List<Expression> children = focusExpression.getChildren();
+
+                //iterate through immediate children to see which one has been clicked
+				for(Expression child : children) {
+					if (xCoord >= child.getBounds().getMaxX() && xCoord <= child.getBounds().getMinX()
+							&& yCoord >= child.getBounds().getMaxY() && yCoord <= child.getBounds().getMaxY()) {
+						childFound = true;
+
+						//TODO make a box around highlighted child
+
+						//than return the child as the new expression
+						highlighted = child;
+					}
+				}
+				//if the highlighted expression has no children
+				if (!childFound) {
+					//TODO undo the box if there is one
+
+					//clear focus
+					highlighted = expression;
+				}
 
             }
+            else {
+				//TODO undo the box if there is one
+
+				//clear focus
+				highlighted = expression;
+			}
         }
+		//TODO undo the box if there is one
+
+		//clear focus
+		highlighted = expression;
     }
 
     /**
