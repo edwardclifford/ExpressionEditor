@@ -1,3 +1,4 @@
+import javafx.geometry.Bounds;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.Node;
@@ -52,6 +53,20 @@ interface Expression {
 	 * @param color the color being set
 	 */
 	void setColor (Color color);
+
+	/**
+	 * Checks if a point is contained inside the node relative to the pane
+	 * @param x the x value of the check point
+	 * @param y the y value of the check point
+	 * @return true if the tested point is contained in the node
+	 */
+	boolean contains (double x, double y);
+
+	/**
+	 * Gets the current bounds of the JavaFX node representing the Expression
+	 * @return a Bounds object containing information about the bounds of the node
+	 */
+	Bounds getBounds ();
 
 	/**
 	 * Recursively flattens the expression as much as possible

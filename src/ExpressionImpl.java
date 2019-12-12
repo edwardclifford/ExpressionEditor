@@ -1,3 +1,4 @@
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -66,6 +67,29 @@ public  class ExpressionImpl implements Expression {
      */
     public Node getNode () {
         return new Text("Expression");
+    }
+
+    /**
+     * Checks if a point is contained inside the node relative to the pane
+     * @param x the x value of the check point
+     * @param y the y value of the check point
+     * @return true if the tested point is contained in the node
+     */
+    public boolean contains(double x, double y) {
+        final Bounds boundsInScene = this.getBounds();
+
+        return (x <= boundsInScene.getMinX() &&
+                x >= boundsInScene.getMaxX() &&
+                y <= boundsInScene.getMinY() &&
+                y >= boundsInScene.getMaxY());
+    }
+
+    /**
+     * Gets the current bounds of the JavaFX node representing the Expression
+     * @return a Bounds object containing information about the bounds of the node
+     */
+    public Bounds getBounds() {
+        return this.getNode().localToScene(this.getNode().getBoundsInLocal());
     }
 
     /**
