@@ -36,7 +36,7 @@ public class ExpressionEditor extends Application {
 
         public void handle (MouseEvent event) {
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                focus(event);
+                updateFocused(event);
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
                 drag(event);
             } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
@@ -68,7 +68,7 @@ public class ExpressionEditor extends Application {
     /**
      * Focus on the expression that is clicked by the user
      */
-    private Expression highlighted;
+    private Expression focusedExpression;
 
     @Override
     public void start (Stage primaryStage) {
@@ -89,7 +89,7 @@ public class ExpressionEditor extends Application {
                 try {
                     // Success! Add the expression's Node to the expressionPane
                     expression = expressionParser.parse(textField.getText(), true);
-                    highlighted = expression;
+                    focusedExpression = expression;
                     System.out.println(expression.convertToString(0));
                     expressionPane.getChildren().clear();
                     expressionPane.getChildren().add(expression.getNode());
@@ -127,13 +127,13 @@ public class ExpressionEditor extends Application {
      * When mouse is pressed, set focus
      * @param event
      */
-    public void focus(MouseEvent event) {
+    public void updateFocused (MouseEvent event) {
         final int xCoord = (int) event.getX();
         final int yCoord = (int) event.getY();
         boolean childFound = false;
 
-        if (highlighted instanceof CompoundExpressionImpl) {
-            CompoundExpressionImpl focusExpression = (CompoundExpressionImpl) highlighted;
+        if (focusedExpression instanceof CompoundExpressionImpl) {
+            CompoundExpressionImpl focusExpression = (CompoundExpressionImpl) focusedExpression;
 
             if (focusExpression.containsPoint(xCoord, yCoord)) {
                 List<Expression> children = focusExpression.getChildren();
@@ -143,18 +143,18 @@ public class ExpressionEditor extends Application {
                     if (child.containsPoint(xCoord, yCoord)) {
                         childFound = true;
                         //TODO make a box around highlighted child
-                        highlighted.setBorder(Expression.NO_BORDER);
+                        focusedExpression.setBorder(Expression.NO_BORDER);
                         child.setBorder(Expression.RED_BORDER);
                         //than return the child as the new expression
-                        highlighted = child;
+                        focusedExpression = child;
                         return;
                     }
                 }
             }
         }
         // Reset focus if no conditions are met
-        highlighted.setBorder(Expression.NO_BORDER);
-        highlighted = expression;
+        focusedExpression.setBorder(Expression.NO_BORDER);
+        focusedExpression = expression;
     }
 
     /**
