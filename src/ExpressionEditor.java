@@ -162,6 +162,27 @@ public class ExpressionEditor extends Application {
      * @param event
      */
     public void drag(MouseEvent event) {
+        int xCoor = (int) event.getX();
+        int yCoor = (int) event.getY();
+
+        closestNode(xCoor, yCoor);
+    }
+
+    /**
+     * Calculates which option to drop the expression is the closest
+     * @param xCoor
+     * @param yCoor
+     */
+    private void closestNode(int xCoor, int yCoor) {
+
+        int prevDistance = 10;
+        int newDistance = 0;
+
+        for(int i= 0; i < pE.possibleExpressions.length; i++) {
+            if(newDistance < prevDistance) {
+
+            }
+        }
 
     }
 
