@@ -60,7 +60,7 @@ interface Expression {
 	 * @param y the y value of the check point
 	 * @return true if the tested point is contained in the node
 	 */
-	boolean contains (double x, double y);
+	boolean containsPoint (double x, double y);
 
 	/**
 	 * Gets the current bounds of the JavaFX node representing the Expression

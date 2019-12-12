@@ -75,7 +75,7 @@ public  class ExpressionImpl implements Expression {
      * @param y the y value of the check point
      * @return true if the tested point is contained in the node
      */
-    public boolean contains(double x, double y) {
+    public boolean containsPoint (double x, double y) {
         final Bounds boundsInScene = this.getBounds();
 
         return (x <= boundsInScene.getMinX() &&

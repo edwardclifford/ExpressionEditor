@@ -134,7 +134,7 @@ public class ExpressionEditor extends Application {
         if (highlighted instanceof CompoundExpressionImpl) {
             CompoundExpressionImpl focusExpression = (CompoundExpressionImpl) highlighted;
 
-            if (focusExpression.contains(xCoord, yCoord)) {
+            if (focusExpression.containsPoint(xCoord, yCoord)) {
                 List<Expression> children = focusExpression.getChildren();
 
                 //iterate through immediate children to see which one has been clicked
