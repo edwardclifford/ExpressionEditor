@@ -78,6 +78,11 @@ public  class ExpressionImpl implements Expression {
     }
 
     /**
+     * Updates and re-creates current and sub-nodes of the expression
+     */
+    public void updateNode () {};
+
+    /**
      * Returns the children of the JavaFX node representing the Expression
      * @return the children of the JavaFX node
      */
@@ -122,6 +127,7 @@ public  class ExpressionImpl implements Expression {
      */
     public void setColor (Color color) {
         this.color = color;
+        this.updateNode();
     }
 
     /**
