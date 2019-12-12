@@ -6,6 +6,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Scene;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -31,9 +34,42 @@ public class ExpressionEditor extends Application {
 
 		public void handle (MouseEvent event) {
 			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+				focus(event);
 			} else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+				drag(event);
 			} else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
+				drop(event);
 			}
+		}
+		/**
+		 * When mouse is pressed, set focus
+		 * @param event
+		 */
+		public void focus(MouseEvent event) {
+			final TextField textField = new TextField(EXAMPLE_EXPRESSION);
+			final Expression expression = expressionParser.parse(textField.getText(), true);
+			int xCoord = (int) event.getX();
+			int yCoord = (int) event.getY();
+
+			if (expression.contains(xCoord, yCoord)) {
+
+
+			}
+		}
+
+		/**
+		 * drag, when the mouse is clicked on the focused expression
+		 * @param event
+		 */
+		public static void drag(MouseEvent event) {
+
+		}
+
+		/**
+		 * Drops the expression when the mouse is no longer pressed
+		 * @param event
+		 */
+		private static void drop(MouseEvent event) {
 		}
 	}
 
@@ -51,6 +87,7 @@ public class ExpressionEditor extends Application {
 	 * Parser used for parsing expressions.
 	 */
 	private final ExpressionParser expressionParser = new SimpleExpressionParser();
+
 
 	@Override
 	public void start (Stage primaryStage) {
@@ -103,4 +140,5 @@ public class ExpressionEditor extends Application {
 		primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
 		primaryStage.show();
 	}
+
 }
