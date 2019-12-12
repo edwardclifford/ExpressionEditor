@@ -29,7 +29,7 @@ public class ExpressionEditor extends Application {
 	/**
 	 * Mouse event handler for the entire pane that constitutes the ExpressionEditor
 	 */
-	private static class MouseEventHandler implements EventHandler<MouseEvent> {
+	private class MouseEventHandler implements EventHandler<MouseEvent> {
 		MouseEventHandler (Pane pane_, CompoundExpression rootExpression_) {
 		}
 
@@ -67,7 +67,7 @@ public class ExpressionEditor extends Application {
 	/**
 	 * Focus on the expression that is clicked by the user
 	 */
-	private static Expression highlighted;
+	private Expression highlighted;
 
 	@Override
 	public void start (Stage primaryStage) {
@@ -126,7 +126,7 @@ public class ExpressionEditor extends Application {
      * When mouse is pressed, set focus
      * @param event
      */
-    public static void focus(MouseEvent event) {
+    public void focus(MouseEvent event) {
         int xCoord = (int) event.getX();
         int yCoord = (int) event.getY();
         boolean childFound = false;
@@ -175,7 +175,7 @@ public class ExpressionEditor extends Application {
      * drag, when the mouse is clicked on the focused expression
      * @param event
      */
-    public static void drag(MouseEvent event) {
+    public void drag(MouseEvent event) {
 
     }
 
@@ -183,7 +183,7 @@ public class ExpressionEditor extends Application {
      * Drops the expression when the mouse is no longer pressed
      * @param event
      */
-    private static void drop(MouseEvent event) {
+    private void drop(MouseEvent event) {
     }
 
 }
