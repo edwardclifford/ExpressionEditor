@@ -80,7 +80,7 @@ public  class ExpressionImpl implements Expression {
     /**
      * Updates and re-creates current and sub-nodes of the expression
      */
-    public void updateNode () {};
+    public void updateNode () {}
 
     /**
      * Returns the children of the JavaFX node representing the Expression
