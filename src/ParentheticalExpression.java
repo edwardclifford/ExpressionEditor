@@ -30,9 +30,14 @@ class ParentheticalExpression extends CompoundExpressionImpl {
         final Text openParen = new Text("(");
         final Text closeParen = new Text(")");
         final Expression child = this.getSubexpressionAt(0);
+
         openParen.setFill(this.color);
+        openParen.setFont(this.font);
         closeParen.setFill(this.color);
+        closeParen.setFont(this.font);
+
         child.setColor(this.color);
+        child.setFont(this.font);
 
         this.container.getChildren().addAll(openParen, child.getNode(), closeParen);
     }

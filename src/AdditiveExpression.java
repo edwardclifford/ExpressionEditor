@@ -32,8 +32,11 @@ class AdditiveExpression extends CompoundExpressionImpl {
         this.container.getChildren().clear();
         for (Expression child : this.getChildren()) {
             child.setColor(this.color);
+            child.setFont(this.font);
+
             final Text plus = new Text("+");
             plus.setFill(this.color);
+            plus.setFont(this.font);
             this.container.getChildren().addAll(child.getNode(), plus);
         }
         this.container.getChildren().remove(this.container.getChildren().size() - 1);

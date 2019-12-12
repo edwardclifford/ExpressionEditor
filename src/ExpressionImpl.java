@@ -1,7 +1,10 @@
+import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public  class ExpressionImpl implements Expression {
@@ -21,6 +24,10 @@ public  class ExpressionImpl implements Expression {
      */
     public Color color = new Color(0, 0, 0, 1.0);
 
+    /**
+     * Current size of the text of the Expression
+     */
+    public Font font = new Font(20);
     /**
      * Implements an expression
      */
@@ -70,6 +77,22 @@ public  class ExpressionImpl implements Expression {
     }
 
     /**
+     * Returns the children of the JavaFX node representing the Expression
+     * @return the children of the JavaFX node
+     */
+    public ObservableList<Node> getNodeChildren() {
+        return this.container.getChildren();
+    }
+
+    /**
+     * Sets the border of the HBox container representing the Expression
+     * @param border the border to set to
+     */
+    public void setBorder (Border border) {
+        this.container.setBorder(border);
+    }
+
+    /**
      * Checks if a point is contained inside the node relative to the pane
      * @param x the x value of the check point
      * @param y the y value of the check point
@@ -78,10 +101,10 @@ public  class ExpressionImpl implements Expression {
     public boolean containsPoint (double x, double y) {
         final Bounds boundsInScene = this.getBounds();
 
-        return (x <= boundsInScene.getMinX() &&
-                x >= boundsInScene.getMaxX() &&
-                y <= boundsInScene.getMinY() &&
-                y >= boundsInScene.getMaxY());
+        return (x >= boundsInScene.getMinX() &&
+                x <= boundsInScene.getMaxX() &&
+                y >= boundsInScene.getMinY() &&
+                y <= boundsInScene.getMaxY());
     }
 
     /**
@@ -98,6 +121,14 @@ public  class ExpressionImpl implements Expression {
      */
     public void setColor (Color color) {
         this.color = color;
+    }
+
+    /**
+     * Sets the font of the JavaFX node
+     * @param font the font being set
+     */
+    public void setFont (Font font) {
+        this.font = font;
     }
 
     /**

@@ -1,7 +1,9 @@
+import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.Node;
+import javafx.scene.text.Font;
 
 interface Expression {
 	/**
@@ -49,10 +51,28 @@ interface Expression {
 	Node getNode ();
 
 	/**
+	 * Returns the children of the JavaFX node representing the Expression
+	 * @return the children of the JavaFX node
+	 */
+	ObservableList<Node> getNodeChildren ();
+
+	/**
+	 * Sets the border of the HBox container representing the Expression
+	 * @param border the border to set to
+	 */
+	void setBorder (Border border);
+
+	/**
 	 * Sets the color of the JavaFX node to a specific color
 	 * @param color the color being set
 	 */
 	void setColor (Color color);
+
+	/**
+	 * Sets the font of the JavaFX node
+	 * @param font the font being set
+	 */
+	void setFont (Font font);
 
 	/**
 	 * Checks if a point is contained inside the node relative to the pane
