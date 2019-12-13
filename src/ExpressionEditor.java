@@ -175,10 +175,12 @@ public class ExpressionEditor extends Application {
      */
     private void closestNode(int xCoor, int yCoor) {
 
-        int prevDistance = 10;
+        int prevDistance = 1000000000;
         int newDistance = 0;
 
-        for(int i= 0; i < pE.possibleExpressions.length; i++) {
+        for(int i= 0; i < possibleExpressions.length(); i++) {
+            MATH(xCoor - _targetX)
+            newDistance = MATH.sqrt();
             if(newDistance < prevDistance) {
 
             }
