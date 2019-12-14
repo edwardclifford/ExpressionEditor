@@ -25,11 +25,15 @@ public class ExpressionEditor extends Application {
 
         public void handle (MouseEvent event) {
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                updateFocused(event);
+                initMouseX = event.getX();
+                initMouseY = event.getY();
 
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-                drag(event);
+                    drag(event);
+
             } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                updateFocused(event);
+
                 drop(event);
             }
         }
@@ -65,6 +69,8 @@ public class ExpressionEditor extends Application {
      */
     private Collection<ExpressionCandidate> possibleExpressions;
 
+    private double initMouseX;
+    private double initMouseY;
     /**
      * Implements a structure for storing a possible expression
      */
@@ -197,35 +203,43 @@ public class ExpressionEditor extends Application {
      * @param event
      */
     public void drag(MouseEvent event) {
-        double xCoor = event.getX();
-        double yCoor = event.getY();
+        if(focusedExpression != expression) {
+            double xCoor = event.getX();
+            double yCoor = event.getY();
 
-        ExpressionCandidate closestNode = closestNodeDistance((int) xCoor, (int) yCoor);
+            //deep copy of the focusedExpression
+            Expression copiedFE = focusedExpression.deepCopy();
 
-        // record a delta distance for the drag and drop operation.
-        List<Integer> coordinates = getFocusedExpressionExpressionCoord();
+            ExpressionCandidate closestNode = closestNodeDistance((int) xCoor, (int) yCoor);
 
-        int focusedX = coordinates.get(1);
-        int focusedY = coordinates.get(2);
+            // record a delta distance for the drag and drop operation.
+            List<Integer> coordinates = getFocusedExpressionExpressionCoord();
 
-        double x = focusedX - event.getX();
-        double y = focusedY - event.getY();
+            int focusedX = coordinates.get(0);
+            int focusedY = coordinates.get(1);
 
-        //setting the layout
-        //desired location is initially the same as the node, than will change according to the closest node distance thing
-        if (closestNode == null) {
-            focusedExpression.getNode().setLayoutX(focusedX);
-            focusedExpression.getNode().setLayoutY(focusedY);
-        } else {
-            focusedExpression.getNode().setLayoutX(closestNode._targetX - focusedX);
-            focusedExpression.getNode().setLayoutY(focusedY);
+            double x = focusedX - event.getX();
+            double y = focusedY - event.getY();
+
+            //setting the layout
+            //desired location is initially the same as the node, than will change according to the closest node distance thing
+            /*
+            if (closestNode == null) {
+                focusedExpression.getNode().setLayoutX(focusedX);
+                focusedExpression.getNode().setLayoutY(focusedY);
+            } else {
+                focusedExpression.getNode().setLayoutX(closestNode._targetX - focusedX);
+                focusedExpression.getNode().setLayoutY(focusedY);
+            }
+            */
+
+
+            // shift node from its initial position by delta
+            // calculated from mouse cursor movement
+            focusedExpression.getNode().setTranslateX(event.getX() - initMouseX);
+            focusedExpression.getNode().setTranslateY(event.getY() - initMouseY);
+
         }
-
-
-        // shift node from its initial position by delta
-        // calculated from mouse cursor movement
-        focusedExpression.getNode().setTranslateX(focusedX + xCoor);
-        focusedExpression.getNode().setTranslateY(focusedY + yCoor);
         
     }
 
@@ -239,13 +253,14 @@ public class ExpressionEditor extends Application {
         
         double prevDistance = 1000000;
         double newDistance = 0;
-
-        for(ExpressionCandidate expressCandidate : possibleExpressions) {
-            newDistance = expressCandidate._targetX;
-
-            if(newDistance <= prevDistance) {
-                closest = expressCandidate;
-                prevDistance = expressCandidate._targetX;
+        if (possibleExpressions != null) {
+            for (ExpressionCandidate expressCandidate : possibleExpressions) {
+                newDistance = expressCandidate._targetX;
+                //change tp actually see which is close to x
+                if (newDistance <= prevDistance) {
+                    closest = expressCandidate;
+                    prevDistance = expressCandidate._targetX;
+                }
             }
         }
         return closest;
