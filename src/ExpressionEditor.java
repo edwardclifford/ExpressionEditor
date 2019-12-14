@@ -28,6 +28,13 @@ public class ExpressionEditor extends Application {
                 initMouseX = event.getX();
                 initMouseY = event.getY();
 
+                possibleExpressions.clear();
+                generateExpressionCandidates(expression, focusedExpression);
+                for (ExpressionCandidate exp : possibleExpressions) {
+                    System.out.println("Possible expression");
+                    System.out.println(exp._expression.convertToString(0));
+                }
+
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
                     drag(event);
 
@@ -67,7 +74,7 @@ public class ExpressionEditor extends Application {
     /**
      * A collection of possible expression candidates where one node of the Expression is re-ordered
      */
-    private Collection<ExpressionCandidate> possibleExpressions;
+    private Collection<ExpressionCandidate> possibleExpressions = new ArrayList<ExpressionCandidate>();
 
     private double initMouseX;
     private double initMouseY;
