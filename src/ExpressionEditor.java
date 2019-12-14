@@ -76,8 +76,32 @@ public class ExpressionEditor extends Application {
      */
     private Collection<ExpressionCandidate> possibleExpressions = new ArrayList<ExpressionCandidate>();
 
+    /**
+     * stores the initial X coordinate of a mouse click for dragging
+     */
     private double initMouseX;
+
+    /**
+     * stores the initial Y coordinate of a mouse click for dragging
+     */
     private double initMouseY;
+
+    /**
+     * Drop coordinates
+     */
+    public boolean wasDragged = false;
+
+    /**
+     * Deep copy of the focused expression
+     */
+    Expression copiedFE;
+
+    /**
+     * The ExpressionCandidate found to be the closest to the mouse event when dropped
+     */
+    ExpressionCandidate closest;
+
+
     /**
      * Implements a structure for storing a possible expression
      */
@@ -206,8 +230,8 @@ public class ExpressionEditor extends Application {
     }
 
     /**
-     * drag, when the mouse is clicked on the focused expression
-     * @param event
+     * When the mouse is clicked on the focused expression and used to drag the expression with the mouse
+     * @param event - MouseEvent
      */
     public void drag(MouseEvent event) {
         if(focusedExpression != expression) {
@@ -215,55 +239,36 @@ public class ExpressionEditor extends Application {
             double yCoor = event.getY();
 
             //deep copy of the focusedExpression
-            Expression copiedFE = focusedExpression.deepCopy();
+            copiedFE = focusedExpression.deepCopy();
 
-            ExpressionCandidate closestNode = closestNodeDistance((int) xCoor, (int) yCoor);
-
-            // record a delta distance for the drag and drop operation.
-            List<Integer> coordinates = getFocusedExpressionExpressionCoord();
-
-            int focusedX = coordinates.get(0);
-            int focusedY = coordinates.get(1);
-
-            double x = focusedX - event.getX();
-            double y = focusedY - event.getY();
-
-            //setting the layout
-            //desired location is initially the same as the node, than will change according to the closest node distance thing
-            /*
-            if (closestNode == null) {
-                focusedExpression.getNode().setLayoutX(focusedX);
-                focusedExpression.getNode().setLayoutY(focusedY);
-            } else {
-                focusedExpression.getNode().setLayoutX(closestNode._targetX - focusedX);
-                focusedExpression.getNode().setLayoutY(focusedY);
-            }
-            */
-
+            //running closestNodeDistance to constantly update the closest expression
+            closestNodeDistance((int) xCoor, (int) yCoor, event);
 
             // shift node from its initial position by delta
             // calculated from mouse cursor movement
             focusedExpression.getNode().setTranslateX(event.getX() - initMouseX);
             focusedExpression.getNode().setTranslateY(event.getY() - initMouseY);
 
+            //setting boolean, letting drop know that drag was initialized and was successful
+            wasDragged = true;
         }
-        
     }
 
     /**
      * Calculates which option to drop the expression is the closest
-     * @param xCoor
-     * @param yCoor
+     * @param xCoor - x coordinate of the mouse
+     * @param yCoor - y coordinate of the mouse
+     * @param event - mouse event
      */
-    private ExpressionCandidate closestNodeDistance(int xCoor, int yCoor) {
-        ExpressionCandidate closest = null;
+    private ExpressionCandidate closestNodeDistance(int xCoor, int yCoor, MouseEvent event) {
+        closest = null;
         
         double prevDistance = 1000000;
         double newDistance = 0;
         if (possibleExpressions != null) {
             for (ExpressionCandidate expressCandidate : possibleExpressions) {
                 newDistance = expressCandidate._targetX;
-                //change tp actually see which is close to x
+                newDistance = newDistance - event.getX();
                 if (newDistance <= prevDistance) {
                     closest = expressCandidate;
                     prevDistance = expressCandidate._targetX;
@@ -274,29 +279,16 @@ public class ExpressionEditor extends Application {
     }
 
     /**
-     * get the values of the expression we want
-     * @return
-     */
-    public List<Integer> getFocusedExpressionExpressionCoord() {
-
-        List<Integer> coordinate=new ArrayList<Integer>();
-
-        double minX = focusedExpression.getBounds().getMinX();
-        double maxX = focusedExpression.getBounds().getMaxX();
-        double minY = focusedExpression.getBounds().getMinY();
-        double maxY = focusedExpression.getBounds().getMaxY();
-
-        coordinate.add((int) ((minX + maxX) / 2));
-        coordinate.add((int) ((minY + maxY) / 2));
-
-        return coordinate;
-    }
-
-    /**
      * Drops the expression when the mouse is no longer pressed
      * @param event
      */
     private void drop(MouseEvent event) {
-    }
+        if(wasDragged) {
+            //re-setting the original expression to the new expression from dragging
+            expression = (Expression) closest;
 
+            //re-set wasDragged
+            wasDragged = false;
+        }
+    }
 }
