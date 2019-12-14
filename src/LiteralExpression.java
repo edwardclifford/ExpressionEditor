@@ -48,8 +48,8 @@ class LiteralExpression extends ExpressionImpl {
      * the copied Expression is as deep as possible.
      * @return the deep copy
      */
-    public Expression deepCopy() {
-        return new LiteralExpression(value);
+    public Expression deepCopy()  {
+        return new LiteralExpression(this.value);
     }
 
     @Override
