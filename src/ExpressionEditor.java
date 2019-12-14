@@ -1,26 +1,15 @@
 import javafx.application.Application;
 import java.util.*;
-import javafx.geometry.Point2D;
-import javafx.scene.control.Label;
-import javafx.event.ActionEvent;
+
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Scene;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.event.EventHandler;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import jdk.jfr.Experimental;
 
 public class ExpressionEditor extends Application {
     public static void main (String[] args) {
@@ -37,6 +26,7 @@ public class ExpressionEditor extends Application {
         public void handle (MouseEvent event) {
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
                 updateFocused(event);
+
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
                 drag(event);
             } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
@@ -163,7 +153,7 @@ public class ExpressionEditor extends Application {
                 for (Expression child : children) {
                     if (child.containsPoint(xCoord, yCoord)) {
                         childFound = true;
-                        //TODO make a box around highlighted child
+                        //make a box around highlighted child
                         focusedExpression.setBorder(Expression.NO_BORDER);
                         child.setBorder(Expression.RED_BORDER);
                         //than return the child as the new expression
@@ -176,17 +166,6 @@ public class ExpressionEditor extends Application {
         // Reset focus if no conditions are met
         focusedExpression.setBorder(Expression.NO_BORDER);
         focusedExpression = expression;
-    }
-
-    /**
-     * drag, when the mouse is clicked on the focused expression
-     * @param event
-     */
-    public void drag(MouseEvent event) {
-        int xCoor = (int) event.getX();
-        int yCoor = (int) event.getY();
-
-        closestNode(xCoor, yCoor);
     }
 
     /**
@@ -214,23 +193,81 @@ public class ExpressionEditor extends Application {
     }
 
     /**
+     * drag, when the mouse is clicked on the focused expression
+     * @param event
+     */
+    public void drag(MouseEvent event) {
+        double xCoor = event.getX();
+        double yCoor = event.getY();
+
+        ExpressionCandidate closestNode = closestNodeDistance((int) xCoor, (int) yCoor);
+
+        // record a delta distance for the drag and drop operation.
+        List<Integer> coordinates = getFocusedExpressionExpressionCoord();
+
+        int focusedX = coordinates.get(1);
+        int focusedY = coordinates.get(2);
+
+        double x = focusedX - event.getX();
+        double y = focusedY - event.getY();
+
+        //setting the layout
+        //desired location is initially the same as the node, than will change according to the closest node distance thing
+        if (closestNode == null) {
+            focusedExpression.getNode().setLayoutX(focusedX);
+            focusedExpression.getNode().setLayoutY(focusedY);
+        } else {
+            focusedExpression.getNode().setLayoutX(closestNode._targetX - focusedX);
+            focusedExpression.getNode().setLayoutY(focusedY);
+        }
+
+
+        // shift node from its initial position by delta
+        // calculated from mouse cursor movement
+        focusedExpression.getNode().setTranslateX(focusedX + xCoor);
+        focusedExpression.getNode().setTranslateY(focusedY + yCoor);
+        
+    }
+
+    /**
      * Calculates which option to drop the expression is the closest
      * @param xCoor
      * @param yCoor
      */
-    private void closestNode(int xCoor, int yCoor) {
+    private ExpressionCandidate closestNodeDistance(int xCoor, int yCoor) {
+        ExpressionCandidate closest = null;
+        
+        double prevDistance = 1000000;
+        double newDistance = 0;
 
-        int prevDistance = 1000000000;
-        int newDistance = 0;
+        for(ExpressionCandidate expressCandidate : possibleExpressions) {
+            newDistance = expressCandidate._targetX;
 
-        for(int i= 0; i < possibleExpressions.length(); i++) {
-            MATH(xCoor - _targetX)
-            newDistance = MATH.sqrt();
-            if(newDistance < prevDistance) {
-
+            if(newDistance <= prevDistance) {
+                closest = expressCandidate;
+                prevDistance = expressCandidate._targetX;
             }
         }
+        return closest;
+    }
 
+    /**
+     * get the values of the expression we want
+     * @return
+     */
+    public List<Integer> getFocusedExpressionExpressionCoord() {
+
+        List<Integer> coordinate=new ArrayList<Integer>();
+
+        double minX = focusedExpression.getBounds().getMinX();
+        double maxX = focusedExpression.getBounds().getMaxX();
+        double minY = focusedExpression.getBounds().getMinY();
+        double maxY = focusedExpression.getBounds().getMaxY();
+
+        coordinate.add((int) ((minX + maxX) / 2));
+        coordinate.add((int) ((minY + maxY) / 2));
+
+        return coordinate;
     }
 
     /**
