@@ -48,7 +48,6 @@ interface Expression {
      */
     Expression deepCopy ();
 
-
     /**
      * Returns the JavaFX node associated with this expression.
      * @return the JavaFX node associated with this expression.

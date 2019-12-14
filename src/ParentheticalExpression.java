@@ -36,7 +36,6 @@ class ParentheticalExpression extends CompoundExpressionImpl {
         closeParen.setFill(this.color);
         closeParen.setFont(this.font);
 
-        child.setColor(this.color);
         child.setFont(this.font);
 
         this.container.getChildren().addAll(openParen, child.getNode(), closeParen);

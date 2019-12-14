@@ -1,4 +1,5 @@
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
 import java.util.*;
 
@@ -19,6 +20,20 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      */
     CompoundExpressionImpl () {
         super();
+    }
+
+    @Override
+    /**
+     * Updates the color of this expression and all it's subexpressions
+     * @param color the color to set the expressions too
+     */
+    public void setColor (Color color) {
+        this.color = color;
+        for (Expression child : this.getChildren()) {
+            child.setColor(color);
+            child.updateNode();
+        }
+        this.updateNode();
     }
 
     /**

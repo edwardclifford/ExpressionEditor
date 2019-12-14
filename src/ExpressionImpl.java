@@ -51,6 +51,11 @@ public  class ExpressionImpl implements Expression {
     }
 
     /**
+     * Returns the current parent of the Expression
+     * @return a CompoundExpression that is the parent of the Expression
+     */
+
+    /**
      * Creates and returns a deep copy of the expression.
      * The entire tree rooted at the target node is copied, i.e.,
      * the copied Expression is as deep as possible.
@@ -127,7 +132,6 @@ public  class ExpressionImpl implements Expression {
      */
     public void setColor (Color color) {
         this.color = color;
-        this.updateNode();
     }
 
     /**

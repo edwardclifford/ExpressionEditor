@@ -79,27 +79,15 @@ public class ExpressionEditor extends Application {
      * Implements a structure for storing a possible expression
      */
     private class ExpressionCandidate {
-        public int _targetX;
-        public int _targetY;
+        public double _targetX;
         public Expression _expression;
-        public Expression _targetExpression;
 
         /**
          * Constructor for a possible Expression candidate
          */
-        ExpressionCandidate (Expression rootExpression, Expression targetExpression) {
+        ExpressionCandidate (Expression rootExpression, double xCoordinate) {
             this._expression = rootExpression;
-            this._targetExpression = targetExpression;
-        }
-
-        /**
-         * Find the projected x-y of a target node inside the pane
-         * @param rootExpression the root expression
-         * @param targetExpression the expression to find the center of
-         * @returns a two length array representing the x, y coordinates of the center of the targetExpression
-         */
-        private int[] getCoordinates(Expression rootExpression, Expression targetExpression) {
-           return new int[] {0, 0};
+            this._targetX = xCoordinate;
         }
     }
 
@@ -199,6 +187,30 @@ public class ExpressionEditor extends Application {
         int yCoor = (int) event.getY();
 
         closestNode(xCoor, yCoor);
+    }
+
+    /**
+     * Updates the collection of Expression candidates based on an Expression and one of its subexpressions
+     * @param parentExpression the Expression being modified
+     * @param subExpression the expression that will be shifted
+     */
+    public void generateExpressionCandidates (Expression parentExpression, Expression subExpression) {
+        final int possiblePermutations = subExpression.getParent().getChildren().size();
+
+        for (int i = 0; i < possiblePermutations; i++) {
+            subExpression.getParent().getChildren().remove(subExpression);
+            subExpression.getParent().getChildren().add(i, subExpression);
+
+            subExpression.setColor(Expression.GHOST_COLOR);
+            parentExpression.updateNode();
+
+            final double minX = subExpression.getBounds().getMinX();
+            final double maxX = subExpression.getBounds().getMaxX();
+            final double centerX = (minX + maxX) / 2;
+
+            final Expression copyExpression = parentExpression.deepCopy();
+            possibleExpressions.add(new ExpressionCandidate(copyExpression, centerX));
+        }
     }
 
     /**
