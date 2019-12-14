@@ -28,12 +28,19 @@ public class ExpressionEditor extends Application {
                 initMouseX = event.getX();
                 initMouseY = event.getY();
 
+                // This initiates the generation of alternate expressions based on the focused expression
+                // It is able to correctly generate these expressions, but issues with JavaFX has caused it to
+                // Display oddly. So we decided to comment it out because the product with dragging looks more complete.
+                // In order to test this method, uncomment it and click on an expression to see it's possible expressions
+                // Print out in the logger.
+                /*
                 possibleExpressions.clear();
                 generateExpressionCandidates(expression, focusedExpression);
                 for (ExpressionCandidate exp : possibleExpressions) {
                     System.out.println("Possible expression");
                     System.out.println(exp._expression.convertToString(0));
                 }
+                 */
 
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
                     drag(event);
@@ -211,7 +218,14 @@ public class ExpressionEditor extends Application {
      * @param subExpression the expression that will be shifted
      */
     public void generateExpressionCandidates (Expression parentExpression, Expression subExpression) {
-        final int possiblePermutations = subExpression.getParent().getChildren().size();
+        int possiblePermutations;
+        if (subExpression.getParent() != null) {
+            possiblePermutations = subExpression.getParent().getChildren().size();
+        }
+        else {
+            // Must be top expression
+            return;
+        }
 
         for (int i = 0; i < possiblePermutations; i++) {
             subExpression.getParent().getChildren().remove(subExpression);
@@ -252,6 +266,7 @@ public class ExpressionEditor extends Application {
             //setting boolean, letting drop know that drag was initialized and was successful
             wasDragged = true;
         }
+        
     }
 
     /**
@@ -278,6 +293,7 @@ public class ExpressionEditor extends Application {
         return closest;
     }
 
+
     /**
      * Drops the expression when the mouse is no longer pressed
      * @param event
@@ -291,4 +307,5 @@ public class ExpressionEditor extends Application {
             wasDragged = false;
         }
     }
+
 }
