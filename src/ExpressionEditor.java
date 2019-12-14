@@ -70,6 +70,39 @@ public class ExpressionEditor extends Application {
      */
     private Expression focusedExpression;
 
+    /**
+     * A collection of possible expression candidates where one node of the Expression is re-ordered
+     */
+    private Collection<ExpressionCandidate> possibleExpressions;
+
+    /**
+     * Implements a structure for storing a possible expression
+     */
+    private class ExpressionCandidate {
+        public int _targetX;
+        public int _targetY;
+        public Expression _expression;
+        public Expression _targetExpression;
+
+        /**
+         * Constructor for a possible Expression candidate
+         */
+        ExpressionCandidate (Expression rootExpression, Expression targetExpression) {
+            this._expression = rootExpression;
+            this._targetExpression = targetExpression;
+        }
+
+        /**
+         * Find the projected x-y of a target node inside the pane
+         * @param rootExpression the root expression
+         * @param targetExpression the expression to find the center of
+         * @returns a two length array representing the x, y coordinates of the center of the targetExpression
+         */
+        private int[] getCoordinates(Expression rootExpression, Expression targetExpression) {
+           return new int[] {0, 0};
+        }
+    }
+
     @Override
     public void start (Stage primaryStage) {
         primaryStage.setTitle("Expression Editor");
